@@ -1,5 +1,12 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
+export enum ArtType {
+  'WATERCOLOR' = 'WATERCOLOR',
+  'PENCIL_DRAWING' = 'PENCIL_DRAWING',
+  'ACRYLIC_PAINTING' = 'ACRYLIC_PAINTING',
+  'OIL_PAINTING' = 'OIL_PAINTING',
+}
+
 @Entity()
 export class PostEntity {
   @PrimaryGeneratedColumn()
@@ -11,6 +18,9 @@ export class PostEntity {
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updateAt: Date;
 
+  @Column()
+  artType: ArtType;
+
   @Column({ type: 'varchar', length: 100 })
   title: string;
 
@@ -19,9 +29,6 @@ export class PostEntity {
 
   @Column({ type: 'varchar' })
   contents: string;
-
-  @Column({ type: 'int' })
-  year: number;
 
   @Column({ type: 'varchar', array: true })
   tags: string[];

@@ -1,5 +1,4 @@
 import { IsOptional, IsString } from 'class-validator';
-import { Column } from 'typeorm';
 
 export class CreatePostDto {
   @IsString()
@@ -17,6 +16,6 @@ export class CreatePostDto {
   @IsString({ each: true })
   tags: string[];
 
-  @Column({ type: 'varchar' })
+  @IsString()
   imgSrc: string;
 }
