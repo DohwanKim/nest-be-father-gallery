@@ -4,6 +4,7 @@ import * as process from 'process';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { PostEntity } from './posts/entitiy/post.entity';
+import { ImagesModule } from './images/images.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { PostEntity } from './posts/entitiy/post.entity';
       synchronize: process.env.NODE_ENV === 'dev',
     }),
     PostsModule,
+    ImagesModule,
   ],
   controllers: [],
   providers: [],
