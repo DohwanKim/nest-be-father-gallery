@@ -7,6 +7,7 @@ import { PostEntity } from './posts/entity/post.entity';
 import { ImagesModule } from './images/images.module';
 import { ImageEntity } from './images/entity/image.entity';
 import { AuthModule } from './auth/auth.module';
+import { UserEntity } from './auth/entity/user.entity';
 
 @Module({
   imports: [
@@ -23,7 +24,7 @@ import { AuthModule } from './auth/auth.module';
       username: process.env.DATABASE_USERNAME,
       password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
-      entities: [PostEntity, ImageEntity],
+      entities: [PostEntity, ImageEntity, UserEntity],
       synchronize: process.env.NODE_ENV === 'dev',
     }),
     PostsModule,
