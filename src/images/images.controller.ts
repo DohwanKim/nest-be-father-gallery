@@ -1,9 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
+import { ImagesService } from './images.service';
 
 @Controller('images')
 export class ImagesController {
-  @Get()
+  constructor(private readonly imagesService: ImagesService) {}
+
+  @Get('/get-upload-url')
   getUploadUrl() {
-    return 'This will return the URL where we can upload our image';
+    return this.imagesService.getUploadUrl();
   }
 }

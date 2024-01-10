@@ -1,18 +1,50 @@
 import { Injectable } from '@nestjs/common';
-import { HttpService } from '@nestjs/axios';
-import * as process from 'process';
+import { ConfigService } from '@nestjs/config';
+import axios, { AxiosResponse } from 'axios';
+
+type CloudflareImageResponse = {
+  result: {
+    id: string;
+    uploadURL: string;
+  };
+  success: boolean;
+  errors: [];
+  messages: [];
+};
 
 @Injectable()
 export class ImagesService {
-  constructor(private readonly httpService: HttpService) {}
+  private accountId: string;
+  private apiToken: string;
 
-  async getUploadUrl() {
-    const uploadUrl = this.httpService.post(
-      `https://api.cloudflare.com/client/v4/accounts/${process.env.CF_ID}/images/v2/direct_upload`,
+  constructor(private configService: ConfigService) {
+    this.accountId = this.configService.get<string>(
+      'CLOUDFLARE_IMAGE_ACCOUNT_ID',
     );
+    this.apiToken = this.configService.get<string>(
+      'CLOUDFLARE_IMAGE_API_TOKEN',
+    );
+  }
 
-    console.log(uploadUrl);
+  async getUploadUrl(): Promise<string> {
+    const cloudflareImageResponse = await axios(
+      `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/images/v2/direct_upload`,
+      {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${this.apiToken}`,
+        },
+      },
+    )
+      .then((e: AxiosResponse<CloudflareImageResponse>) => e.data)
+      .catch((e) => {
+        throw new Error(e);
+      });
 
-    return 'This will return the URL where we can upload our image';
+    if (!cloudflareImageResponse.success)
+      throw new Error('Failed to get upload URL');
+
+    return cloudflareImageResponse.result.uploadURL;
   }
 }
