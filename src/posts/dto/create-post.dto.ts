@@ -1,5 +1,5 @@
 import { IsObject, IsOptional, IsString } from 'class-validator';
-import { ImageEntity } from '../../images/entitiy/image.entitiy';
+import { ImageEntity } from '../../images/entity/image.entity';
 
 export class CreatePostDto {
   @IsString()

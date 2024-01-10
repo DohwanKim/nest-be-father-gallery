@@ -1,5 +1,5 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
-import { ImageEntity } from '../../images/entitiy/image.entitiy';
+import { ImageEntity } from '../../images/entity/image.entity';
 
 export enum ArtType {
   'WATERCOLOR' = 'WATERCOLOR',

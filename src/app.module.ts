@@ -3,9 +3,10 @@ import { PostsModule } from './posts/posts.module';
 import * as process from 'process';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { PostEntity } from './posts/entitiy/post.entity';
+import { PostEntity } from './posts/entity/post.entity';
 import { ImagesModule } from './images/images.module';
-import { ImageEntity } from './images/entitiy/image.entitiy';
+import { ImageEntity } from './images/entity/image.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ImageEntity } from './images/entitiy/image.entitiy';
     }),
     PostsModule,
     ImagesModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
