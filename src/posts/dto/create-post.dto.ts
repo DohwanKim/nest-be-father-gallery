@@ -1,4 +1,5 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsObject, IsOptional, IsString } from 'class-validator';
+import { ImageEntity } from '../../images/entitiy/image.entitiy';
 
 export class CreatePostDto {
   @IsString()
@@ -16,6 +17,6 @@ export class CreatePostDto {
   @IsString({ each: true })
   tags: string[];
 
-  @IsString()
-  imgSrc: string;
+  @IsObject()
+  img: ImageEntity;
 }

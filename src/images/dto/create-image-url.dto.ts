@@ -1,21 +1,28 @@
-import { IsOptional, IsString } from 'class-validator';
+import {
+  IsBoolean,
+  IsObject,
+  IsOptional,
+  IsString,
+  IsTimeZone,
+} from 'class-validator';
 
-export class CreatePostDto {
+export class CreateImageUrlDto {
   @IsString()
-  title: string;
+  id: string;
+
+  @IsString()
+  filename: string;
 
   @IsOptional()
-  @IsString()
-  paperType: string;
+  @IsObject()
+  metadata: { [key: string]: string };
 
-  @IsOptional()
-  @IsString()
-  contents: string;
+  @IsTimeZone()
+  uploaded: Date;
 
-  @IsOptional()
+  @IsBoolean()
+  requireSignedURLs: boolean;
+
   @IsString({ each: true })
-  tags: string[];
-
-  @IsString()
-  imgSrc: string;
+  variants: string[];
 }
