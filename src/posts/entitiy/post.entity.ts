@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { ImageEntity } from '../../images/entitiy/image.entitiy';
 
 export enum ArtType {
   'WATERCOLOR' = 'WATERCOLOR',
@@ -33,6 +34,6 @@ export class PostEntity {
   @Column({ type: 'varchar', array: true })
   tags: string[];
 
-  @Column({ type: 'varchar' })
-  imgSrc: string;
+  @OneToOne(() => ImageEntity, (img) => img.id, { eager: true })
+  img: ImageEntity;
 }
