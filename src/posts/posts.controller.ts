@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { PostsService } from './posts.service';
-import { PostEntity } from './entitiy/post.entity';
+import { PostEntity } from './entity/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 
