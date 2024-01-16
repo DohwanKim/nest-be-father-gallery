@@ -12,7 +12,7 @@ import { PostsService } from './posts.service';
 import { PostEntity } from './entity/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { AuthGuard } from '@nestjs/passport';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -29,19 +29,19 @@ export class PostsController {
   }
 
   @Post()
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   createPost(@Body() postData: CreatePostDto): Promise<PostEntity> {
     return this.postsService.createPost(postData);
   }
 
   @Patch(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   updatePost(@Param('id') postId: number, @Body() updateData: UpdatePostDto) {
     return this.postsService.updatePost(postId, updateData);
   }
 
   @Delete(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   deletePost(@Param('id') postId: number) {
     return this.postsService.deletePost(postId);
   }
