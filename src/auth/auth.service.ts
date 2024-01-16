@@ -22,8 +22,10 @@ export class AuthService {
   async createUser(userData: CreateUserDto) {
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(userData.password, salt);
-    let newUser: UserEntity = new UserEntity();
-    newUser = { ...newUser, ...userData, password: hashedPassword };
+    const newUser: UserEntity = this.userRepository.create({
+      ...userData,
+      password: hashedPassword,
+    });
 
     try {
       await this.userRepository.save(newUser);
