@@ -1,7 +1,16 @@
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToOne,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+  VersionColumn,
+} from 'typeorm';
 import { ImageEntity } from '../../images/entity/image.entity';
 
 export enum ArtType {
+  'NONE' = 'NONE',
   'WATERCOLOR' = 'WATERCOLOR',
   'PENCIL_DRAWING' = 'PENCIL_DRAWING',
   'ACRYLIC_PAINTING' = 'ACRYLIC_PAINTING',
@@ -13,17 +22,26 @@ export class PostEntity {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @CreateDateColumn()
   createAt: Date;
 
-  @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
+  @UpdateDateColumn()
   updateAt: Date;
 
-  @Column()
+  @VersionColumn()
+  version: number;
+
+  @Column({ type: 'enum', enum: ArtType, default: ArtType.NONE })
   artType: ArtType;
 
   @Column({ type: 'varchar', length: 100 })
   title: string;
+
+  @Column({ type: 'varchar', length: 100 })
+  size: string;
+
+  @Column({ type: 'int' })
+  price: number;
 
   @Column({ type: 'varchar', length: 100 })
   paperType: string;
@@ -31,7 +49,7 @@ export class PostEntity {
   @Column({ type: 'varchar' })
   contents: string;
 
-  @Column({ type: 'varchar', array: true })
+  @Column('simple-array')
   tags: string[];
 
   @OneToOne(() => ImageEntity, (img) => img.id, { eager: true })

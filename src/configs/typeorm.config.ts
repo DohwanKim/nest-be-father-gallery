@@ -13,5 +13,6 @@ export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
     database: configService.get('DATABASE_NAME'),
     synchronize: configService.get('ENV_TYPE') === 'dev',
     entities: ['dist/**/*.entity{.ts,.js}'],
+    logging: configService.get('ENV_TYPE') === 'dev',
   }),
 };
