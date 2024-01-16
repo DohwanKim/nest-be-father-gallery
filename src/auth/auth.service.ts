@@ -1,46 +1,31 @@
-import {
-  ConflictException,
-  Injectable,
-  InternalServerErrorException,
-  UnauthorizedException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { UserEntity } from './entity/user.entity';
-import { Repository } from 'typeorm';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
+import { SignInDto } from './dto/sign-in.dto';
+import { UsersService } from '../users/users.service';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(UserEntity)
-    private userRepository: Repository<UserEntity>,
+    private userService: UsersService,
     private jwtService: JwtService,
   ) {}
 
-  async createUser(userData: CreateUserDto) {
+  async signUp(signUpDto: SignUpDto) {
     const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(userData.password, salt);
-    const newUser: UserEntity = this.userRepository.create({
-      ...userData,
+    const hashedPassword = await bcrypt.hash(signUpDto.password, salt);
+    const newUser = {
+      username: signUpDto.username,
       password: hashedPassword,
-    });
+    };
 
-    try {
-      await this.userRepository.save(newUser);
-    } catch (e) {
-      if (e.code === '23505') {
-        throw new ConflictException('User already exists');
-      } else {
-        throw new InternalServerErrorException();
-      }
-    }
+    await this.userService.createUser(newUser);
   }
 
-  async signIn(userData: CreateUserDto) {
-    const { username, password } = userData;
-    const user = await this.userRepository.findOne({ where: { username } });
+  async signIn(signInDto: SignInDto) {
+    const { username, password } = signInDto;
+    const user = await this.userService.findOne(username);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const payload = { username };

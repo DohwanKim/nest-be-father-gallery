@@ -1,27 +1,19 @@
-import { Body, Controller, Post, UseGuards } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user.dto';
+import { Body, Controller, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { AuthGuard } from '@nestjs/passport';
-import { GetUserDecorator } from './get-user.decorator';
-import { UserEntity } from './entity/user.entity';
+import { SignUpDto } from './dto/sign-up.dto';
+import { SignInDto } from './dto/sign-in.dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Post('/signup')
-  async signUp(@Body() createUserDto: CreateUserDto) {
-    return await this.authService.createUser(createUserDto);
+  async signUp(@Body() signUpDto: SignUpDto) {
+    return await this.authService.signUp(signUpDto);
   }
 
   @Post('/signin')
-  async signIn(@Body() createUserDto: CreateUserDto) {
-    return await this.authService.signIn(createUserDto);
-  }
-
-  @Post('/test')
-  @UseGuards(AuthGuard())
-  async test(@GetUserDecorator() user: UserEntity) {
-    console.log('req', user);
+  async signIn(@Body() signInDto: SignInDto) {
+    return await this.authService.signIn(signInDto);
   }
 }

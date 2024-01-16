@@ -5,6 +5,7 @@ import {
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
+  VersionColumn,
 } from 'typeorm';
 import { ImageEntity } from '../../images/entity/image.entity';
 
@@ -26,6 +27,9 @@ export class PostEntity {
 
   @UpdateDateColumn()
   updateAt: Date;
+
+  @VersionColumn()
+  version: number;
 
   @Column({ type: 'enum', enum: ArtType, default: ArtType.NONE })
   artType: ArtType;

@@ -5,6 +5,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ImagesModule } from './images/images.module';
 import { AuthModule } from './auth/auth.module';
 import { typeOrmConfig } from './configs/typeorm.config';
+import { UsersModule } from './users/users.module';
 import * as Joi from 'joi';
 
 @Module({
@@ -32,6 +33,7 @@ import * as Joi from 'joi';
     PostsModule,
     ImagesModule,
     AuthModule,
+    UsersModule,
   ],
   controllers: [],
   providers: [],
