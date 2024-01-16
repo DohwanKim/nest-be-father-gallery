@@ -23,8 +23,7 @@ export class PostsService {
   }
 
   async createPost(postData: CreatePostDto) {
-    let newPost: PostEntity = new PostEntity();
-    newPost = { ...newPost, ...postData };
+    const newPost = this.postsRepository.create(postData);
     return await this.postsRepository.save(newPost);
   }
 
