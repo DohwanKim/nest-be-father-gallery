@@ -25,7 +25,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
     });
   }
 
-  // TODO: 무한 로그인 구현 시 여기에 리플래시 만료 시간 계산해서 갱신 하는 거 넣기
+  // TODO: 로직 추가 관련 - 무한 로그인 구현 시 여기에 리플래시 만료 시간 계산해서 갱신 하는 거 넣기
   async validate(req: Request, payload: any) {
     const refreshToken = req.cookies?.refreshToken;
     const { id } = payload;

@@ -43,7 +43,7 @@ export class AuthController {
     return { accessToken, refreshToken };
   }
 
-  // TODO: req 타입을 Request 와 user가 둘다 들어있는 타입으로 만들어주기
+  // TODO: 타입스크립트 코드 리펙토링 관련 - req 타입을 Request 와 user가 둘다 들어있는 타입으로 만들어주기
   @Post('/signout')
   @UseGuards(JwtRefreshGuard)
   async signOut(@Res({ passthrough: true }) res: Response, @Req() req: any) {
