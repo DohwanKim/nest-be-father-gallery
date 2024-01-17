@@ -12,7 +12,7 @@ import { PostsService } from './posts.service';
 import { PostEntity } from './entity/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { JwtAccessGuard } from '../auth/guards/jwt-access.guard';
 
 @Controller('posts')
 export class PostsController {
@@ -29,19 +29,19 @@ export class PostsController {
   }
 
   @Post()
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAccessGuard)
   createPost(@Body() postData: CreatePostDto): Promise<PostEntity> {
     return this.postsService.createPost(postData);
   }
 
   @Patch(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAccessGuard)
   updatePost(@Param('id') postId: number, @Body() updateData: UpdatePostDto) {
     return this.postsService.updatePost(postId, updateData);
   }
 
   @Delete(':id')
-  @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAccessGuard)
   deletePost(@Param('id') postId: number) {
     return this.postsService.deletePost(postId);
   }

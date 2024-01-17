@@ -6,6 +6,7 @@ import {
   Unique,
   UpdateDateColumn,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 export type UserRoleType = 'ADMIN' | 'MANAGER' | 'USER';
 
@@ -30,6 +31,11 @@ export class UserEntity {
   @Column({
     type: 'enum',
     enum: ['ADMIN', 'MANAGER', 'USER'],
+    default: 'ADMIN',
   })
   role: UserRoleType;
+
+  @Column({ nullable: true })
+  @Exclude()
+  currentHashedRefreshToken?: string;
 }
