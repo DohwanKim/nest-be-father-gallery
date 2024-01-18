@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { UserEntity } from '../../users/entity/user.entity';
 
 @Entity()
 export class ImageEntity {
@@ -22,4 +23,7 @@ export class ImageEntity {
 
   @Column({ type: 'varchar', array: true })
   variants: string[];
+
+  @OneToOne(() => UserEntity, (userEntity) => userEntity.id, { eager: true })
+  img: ImageEntity;
 }
