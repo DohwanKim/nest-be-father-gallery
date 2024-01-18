@@ -57,4 +57,18 @@ export class UsersService {
 
     return isRefreshTokenMatching ? user : null;
   }
+
+  async getMyInfo(id: number) {
+    const user = await this.userRepository.findOne({ where: { id } });
+
+    if (!user) {
+      throw new InternalServerErrorException();
+    }
+
+    return {
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    };
+  }
 }
