@@ -1,7 +1,6 @@
 import {
   IsEnum,
   IsNumber,
-  IsObject,
   IsOptional,
   IsString,
   MaxLength,
@@ -9,6 +8,7 @@ import {
 } from 'class-validator';
 import { ImageEntity } from '../../images/entity/image.entity';
 import { ArtType } from '../entity/post.entity';
+import { Type } from 'class-transformer';
 
 export class CreatePostDto {
   @IsString()
@@ -42,6 +42,7 @@ export class CreatePostDto {
   @IsOptional()
   tags: string[];
 
-  @IsObject()
+  @Type(() => ImageEntity)
+  @IsOptional()
   img: ImageEntity;
 }

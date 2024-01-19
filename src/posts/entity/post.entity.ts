@@ -77,7 +77,10 @@ export class PostEntity {
   })
   tags: string[];
 
-  @OneToOne(() => ImageEntity)
-  @JoinColumn({ name: 'image_uid' })
+  @OneToOne(() => ImageEntity, (image) => image.id, {
+    cascade: true,
+    eager: true,
+  })
+  @JoinColumn()
   img: ImageEntity;
 }
