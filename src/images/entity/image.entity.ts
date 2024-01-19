@@ -1,4 +1,5 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { PostEntity } from '../../posts/entity/post.entity';
 
 @Entity()
 export class ImageEntity {
@@ -22,4 +23,9 @@ export class ImageEntity {
 
   @Column({ type: 'varchar', array: true })
   variants: string[];
+
+  @OneToOne(() => PostEntity, (postEntity) => postEntity.id, {
+    onDelete: 'CASCADE',
+  })
+  post: PostEntity;
 }
