@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { PostEntity } from './entity/post.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -18,7 +18,7 @@ export class PostsService {
 
   async getOnePost(id: number): Promise<PostEntity> {
     const post = await this.postsRepository.findOne({ where: { id } });
-    if (!post) throw new BadRequestException(`Post id ${id} not found`);
+    if (!post) throw new NotFoundException(`Post id ${id} not found`);
     return post;
   }
 
@@ -37,7 +37,7 @@ export class PostsService {
   async deletePost(id: number) {
     const result = await this.postsRepository.delete({ id });
     if (result.affected === 0)
-      throw new BadRequestException(`Post id ${id} not found`);
+      throw new NotFoundException(`Post id ${id} not found`);
     return true;
   }
 }
