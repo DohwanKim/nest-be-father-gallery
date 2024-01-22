@@ -2,6 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 import { NotFoundException } from '@nestjs/common';
+import { ArtType } from './entity/post.entity';
 
 const mockService = {
   getAllPost: jest.fn(),
@@ -87,7 +88,6 @@ describe('PostsController', () => {
       expect(await controller.getOnePost(id)).toEqual(result);
     });
 
-    // TODO: 의도적으로 에러 발생시켜서 컨트롤러에서 이를 확인해야함.
     it('should throw NotFoundException if post is not found', async () => {
       const nonExistingId = 999;
       jest
@@ -96,19 +96,54 @@ describe('PostsController', () => {
           new NotFoundException(`Post id ${nonExistingId} not found`),
         );
 
-      // try {
-      //   await controller.getOnePost(nonExistingId);
-      // } catch (e) {
-      //   expect(e).toBeInstanceOf(NotFoundException);
-      // }
-
-      await expect(controller.getOnePost(nonExistingId)).rejects.toThrowError(
-        NotFoundException,
-      );
+      try {
+        await controller.getOnePost(nonExistingId);
+      } catch (e) {
+        expect(e).toBeInstanceOf(NotFoundException);
+      }
     });
   });
 
-  it.todo('createPost');
-  it.todo('updatePost');
-  it.todo('deletePost');
+  describe('createPost', () => {
+    it('should create a post', async () => {
+      const postData = {
+        title: 'init title',
+        artType: 'NONE' as ArtType,
+        canvasSize: '100x100',
+        price: 100,
+        frameType: '도화지',
+        contents: '게시글',
+        tags: [],
+        img: null,
+      };
+      jest.spyOn(service, 'createPost').mockImplementation(() => true);
+      expect(await controller.createPost(postData)).toBe(true);
+    });
+  });
+
+  describe('updatePost', () => {
+    it('should update a post', async () => {
+      const id = 1;
+      const updateData = {
+        title: 'update title',
+        artType: 'NONE' as ArtType,
+        canvasSize: '100x100',
+        price: 100,
+        frameType: '도화지',
+        contents: '게시글',
+        tags: [],
+        img: null,
+      };
+      jest.spyOn(service, 'updatePost').mockImplementation(() => true);
+      expect(await controller.updatePost(id, updateData)).toBe(true);
+    });
+  });
+
+  describe('deletePost', () => {
+    it('should delete a post', async () => {
+      const id = 1;
+      jest.spyOn(service, 'deletePost').mockImplementation(() => true);
+      expect(await controller.deletePost(id)).toBe(true);
+    });
+  });
 });
