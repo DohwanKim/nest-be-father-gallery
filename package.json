@@ -91,7 +91,18 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      ".entity.ts",
+      ".dto.ts",
+      ".config.ts",
+      ".config.js",
+      ".module.ts",
+      ".strategy.ts",
+      ".guard.ts",
+      "main.ts"
+    ]
   },
   "lint-staged": {
     "*.{ts,tsx}": [
