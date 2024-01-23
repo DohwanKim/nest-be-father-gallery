@@ -27,7 +27,7 @@ export class AuthService {
 
   async signIn(signInDto: SignInDto) {
     const { username, password } = signInDto;
-    const user = await this.userService.findOne(username);
+    const user = await this.userService.findOneByUsername(username);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const accessTokenData = this.getCookieWithJwtAccessToken(user);
