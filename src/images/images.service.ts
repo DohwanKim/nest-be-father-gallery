@@ -27,20 +27,22 @@ export class ImagesService {
   }
 
   async getUploadUrl(): Promise<string> {
-    const cloudflareImageResponse = await axios(
-      `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/images/v2/direct_upload`,
-      {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${this.apiToken}`,
+    let cloudflareImageResponse: CloudflareImageResponse;
+
+    try {
+      cloudflareImageResponse = await axios(
+        `https://api.cloudflare.com/client/v4/accounts/${this.accountId}/images/v2/direct_upload`,
+        {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${this.apiToken}`,
+          },
         },
-      },
-    )
-      .then((e: AxiosResponse<CloudflareImageResponse>) => e.data)
-      .catch((e) => {
-        throw new Error(e);
-      });
+      ).then((res: AxiosResponse<CloudflareImageResponse>) => res.data);
+    } catch (error) {
+      throw new Error('cloudflare image service is showdown');
+    }
 
     if (!cloudflareImageResponse.success)
       throw new Error('Failed to get upload URL');

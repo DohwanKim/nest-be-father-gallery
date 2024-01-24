@@ -2,6 +2,7 @@ import {
   ConflictException,
   Injectable,
   InternalServerErrorException,
+  NotFoundException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entity/user.entity';
@@ -20,7 +21,7 @@ export class UsersService {
     const newUser: UserEntity = this.userRepository.create(userData);
 
     try {
-      await this.userRepository.save(newUser);
+      return await this.userRepository.save(newUser);
     } catch (e) {
       if (e.code === '23505') {
         throw new ConflictException('User already exists');
@@ -30,8 +31,16 @@ export class UsersService {
     }
   }
 
-  async findOne(username: string): Promise<UserEntity> {
-    return await this.userRepository.findOne({ where: { username } });
+  async findOneByUsername(username: string): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { username } });
+    if (!user) throw new NotFoundException(`"${username}" is not found`);
+    return user;
+  }
+
+  async findOneById(id: number): Promise<UserEntity> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new NotFoundException(`id "${id}" is not found`);
+    return user;
   }
 
   async setUserCurrentRefreshToken(refreshToken: string, userId: number) {
@@ -49,7 +58,7 @@ export class UsersService {
   }
 
   async getUserIfRefreshTokenMatches(refreshToken: string, userId: number) {
-    const user = await this.userRepository.findOne({ where: { id: userId } });
+    const user = await this.findOneById(userId);
     const isRefreshTokenMatching = await bcrypt.compare(
       refreshToken,
       user.currentHashedRefreshToken,
@@ -59,16 +68,12 @@ export class UsersService {
   }
 
   async getMyInfo(id: number) {
-    const user = await this.userRepository.findOne({ where: { id } });
-
-    if (!user) {
-      throw new InternalServerErrorException();
-    }
+    const { username, role } = await this.findOneById(id);
 
     return {
-      id: user.id,
-      username: user.username,
-      role: user.role,
+      id,
+      username,
+      role,
     };
   }
 }

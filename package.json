@@ -61,6 +61,7 @@
     "@types/supertest": "^2.0.12",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "axios-mock-adapter": "^1.22.0",
     "eslint": "^8.42.0",
     "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-prettier": "^5.0.0",
@@ -91,7 +92,18 @@
       "**/*.(t|j)s"
     ],
     "coverageDirectory": "../coverage",
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "coveragePathIgnorePatterns": [
+      "/node_modules/",
+      ".entity.ts",
+      ".dto.ts",
+      ".config.ts",
+      ".config.js",
+      ".module.ts",
+      ".strategy.ts",
+      ".guard.ts",
+      "main.ts"
+    ]
   },
   "lint-staged": {
     "*.{ts,tsx}": [
