@@ -40,7 +40,7 @@ export class AuthService {
 
       return { accessTokenData, refreshTokenData };
     } else {
-      throw new UnauthorizedException('Please check your login credentials');
+      throw new UnauthorizedException('invalid password');
     }
   }
 

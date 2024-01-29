@@ -3,6 +3,7 @@ import {
   Injectable,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UserEntity } from './entity/user.entity';
@@ -33,7 +34,7 @@ export class UsersService {
 
   async findOneByUsername(username: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { username } });
-    if (!user) throw new NotFoundException(`"${username}" is not found`);
+    if (!user) throw new UnauthorizedException('invalid ID');
     return user;
   }
 
