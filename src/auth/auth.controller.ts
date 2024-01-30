@@ -39,6 +39,7 @@ export class AuthController {
     res.setHeader('Authorization', 'Bearer ' + [accessToken, refreshToken]);
     res.cookie('accessToken', accessToken, accessOption);
     res.cookie('refreshToken', refreshToken, refreshOption);
+    res.statusCode = 200;
 
     return { accessToken, refreshToken };
   }
@@ -53,6 +54,7 @@ export class AuthController {
     await this.usersService.removeRefreshToken(req.user.id);
     res.cookie('accessToken', '', accessOption);
     res.cookie('refreshToken', '', refreshOption);
+    res.statusCode = 200;
 
     return true;
   }
