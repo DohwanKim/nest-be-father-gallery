@@ -1,9 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication, Logger, ValidationPipe } from '@nestjs/common';
+import { INestApplication, ValidationPipe } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from '../src/app.module';
 import { DataSource } from 'typeorm';
-import * as cookieParser from 'cookie-parser';
 import { JwtRefreshGuard } from '../src/auth/guards/jwt-refresh.guard';
 import { mockAuthGuard } from './mock-auth-guard';
 
@@ -22,13 +21,11 @@ describe('Auth (e2e)', () => {
     const moduleFixture: TestingModule = await Test.createTestingModule({
       imports: [AppModule],
     })
-      .setLogger(new Logger())
       .overrideGuard(JwtRefreshGuard)
       .useValue(mockAuthGuard)
       .compile();
 
     app = moduleFixture.createNestApplication();
-    app.use(cookieParser());
     app.useGlobalPipes(
       new ValidationPipe({
         whitelist: true,
