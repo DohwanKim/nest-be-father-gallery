@@ -9,6 +9,12 @@ import { UserEntity } from '../users/entity/user.entity';
 
 @Injectable()
 export class AuthService {
+  private readonly tokenOptionBase = {
+    domain: this.configService.get('DOMAIN'),
+    path: '/',
+    httpOnly: true,
+  };
+
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
@@ -52,10 +58,8 @@ export class AuthService {
     });
 
     return {
+      ...this.tokenOptionBase,
       accessToken: token,
-      domain: 'localhost',
-      path: '/',
-      httpOnly: true,
     };
   }
 
@@ -67,27 +71,20 @@ export class AuthService {
     });
 
     return {
+      ...this.tokenOptionBase,
       refreshToken: token,
-      domain: 'localhost',
-      path: '/',
-      httpOnly: true,
     };
   }
 
   getCookiesForLogOut() {
+    const logoutOption = {
+      ...this.tokenOptionBase,
+      maxAge: 0,
+    };
+
     return {
-      accessOption: {
-        domain: 'localhost',
-        path: '/',
-        httpOnly: true,
-        maxAge: 0,
-      },
-      refreshOption: {
-        domain: 'localhost',
-        path: '/',
-        httpOnly: true,
-        maxAge: 0,
-      },
+      accessOption: logoutOption,
+      refreshOption: logoutOption,
     };
   }
 }
