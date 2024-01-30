@@ -26,7 +26,7 @@ export class ImagesService {
     );
   }
 
-  async getUploadUrl(): Promise<string> {
+  async getUploadUrl(): Promise<{ uploadUrl: string }> {
     let cloudflareImageResponse: CloudflareImageResponse;
 
     try {
@@ -47,6 +47,8 @@ export class ImagesService {
     if (!cloudflareImageResponse.success)
       throw new Error('Failed to get upload URL');
 
-    return cloudflareImageResponse.result.uploadURL;
+    return {
+      uploadUrl: cloudflareImageResponse.result.uploadURL,
+    };
   }
 }
