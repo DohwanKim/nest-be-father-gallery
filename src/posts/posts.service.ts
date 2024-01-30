@@ -4,6 +4,11 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import {
+  paginate,
+  IPaginationOptions,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
 
 @Injectable()
 export class PostsService {
@@ -14,6 +19,10 @@ export class PostsService {
 
   async getAllPost(): Promise<PostEntity[]> {
     return await this.postsRepository.find();
+  }
+
+  async paginate(options: IPaginationOptions): Promise<Pagination<PostEntity>> {
+    return paginate<PostEntity>(this.postsRepository, options);
   }
 
   async getOnePost(id: number): Promise<PostEntity> {
