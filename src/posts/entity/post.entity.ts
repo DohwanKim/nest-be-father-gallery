@@ -77,7 +77,7 @@ export class PostEntity {
   })
   tags: string[];
 
-  @OneToOne(() => ImageEntity, (image) => image.id, {
+  @OneToOne(() => ImageEntity, (image) => image.uid, {
     cascade: true,
     eager: true,
   })
