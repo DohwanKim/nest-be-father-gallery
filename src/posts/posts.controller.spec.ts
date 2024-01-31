@@ -3,13 +3,23 @@ import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 import { NotFoundException } from '@nestjs/common';
 import { ArtType } from './entity/post.entity';
+import { ConfigService } from '@nestjs/config';
 
 const mockService = {
-  getAllPost: jest.fn(),
+  getPostListPaginateWithFilter: jest.fn(),
   getOnePost: jest.fn(),
   createPost: jest.fn(),
   updatePost: jest.fn(),
   deletePost: jest.fn(),
+};
+
+const mockConfigService = {
+  get: jest.fn((key: string) => {
+    if (key === 'DOMAIN_URL') {
+      return 'http://localhost:3000';
+    }
+    return null;
+  }),
 };
 
 type MockService = Partial<Record<keyof PostsService, jest.Mock>>;
@@ -26,6 +36,10 @@ describe('PostsController', () => {
           provide: PostsService,
           useValue: mockService,
         },
+        {
+          provide: ConfigService,
+          useValue: mockConfigService,
+        },
       ],
     }).compile();
 
@@ -38,28 +52,66 @@ describe('PostsController', () => {
   });
 
   describe('getAllPost', () => {
-    it('should return an array', async () => {
-      const expectResult = [
-        {
-          id: 2,
-          createAt: '2024-01-18T08:56:02.721Z',
-          updateAt: '2024-01-18T08:56:02.721Z',
-          version: 2,
-          title: 'init title',
-          artType: 'NONE',
-          canvasSize: '100x100',
-          price: 100,
-          frameType: '도화지',
-          contents: '게시글',
-          tags: [],
-          img: null,
-        },
-      ];
-      jest.spyOn(service, 'getAllPost').mockImplementation(() => expectResult);
+    it('should return an array of posts', async () => {
+      const expectResult = {
+        results: [
+          {
+            id: 1,
+            createAt: '2024-01-18T08:56:02.721Z',
+            updateAt: '2024-01-18T08:56:02.721Z',
+            version: 2,
+            title: 'init title',
+            artType: 'NONE',
+            canvasSize: '100x100',
+            price: 100,
+            frameType: '도화지',
+            contents: '게시글',
+            tags: [],
+            img: null,
+          },
+        ],
+      };
+      jest
+        .spyOn(service, 'getPostListPaginateWithFilter')
+        .mockImplementation(() => expectResult);
 
-      const result = await service.getAllPost();
-      expect(service.getAllPost).toHaveBeenCalled();
-      expect(await controller.getAllPost()).toEqual(result);
+      const result = await service.getPostListPaginateWithFilter();
+      expect(service.getPostListPaginateWithFilter).toHaveBeenCalled();
+      expect(await controller.getAllPost()).toMatchObject(result);
+    });
+
+    it('should limit the result to 100 even if limit is more than 100', async () => {
+      const expectResult = {
+        results: [
+          {
+            id: 1,
+            createAt: '2024-01-18T08:56:02.721Z',
+            updateAt: '2024-01-18T08:56:02.721Z',
+            version: 2,
+            title: 'init title',
+            artType: 'NONE',
+            canvasSize: '100x100',
+            price: 100,
+            frameType: '도화지',
+            contents: '게시글',
+            tags: [],
+            img: null,
+          },
+        ],
+      };
+      const limit = 150;
+      const expectedLimit = 100;
+
+      jest
+        .spyOn(service, 'getPostListPaginateWithFilter')
+        .mockImplementation(() => expectResult);
+
+      const result = await controller.getAllPost(1, limit);
+      expect(service.getPostListPaginateWithFilter).toHaveBeenCalledWith(
+        expect.objectContaining({ limit: expectedLimit }),
+        expect.anything(),
+      );
+      expect(result).toMatchObject(expectResult);
     });
   });
 

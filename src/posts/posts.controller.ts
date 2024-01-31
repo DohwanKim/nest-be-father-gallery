@@ -26,28 +26,22 @@ export class PostsController {
     private configService: ConfigService,
   ) {}
 
-  /**
-   * TODO:
-   *  - [x] 페이지네이션을 잘 작동함. 날먹 개꿀
-   *  - [x] 문제는 검색 옵션. -> 이름으로 검색, 내용으로 검색, 작성자로 검색, 작성일로 검색 등등 기능 추가 필요
-   *  - [] 그리고 테스트 코드 수정해야함
-   */
   @Get()
   getAllPost(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page: number = 1,
-    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit: number = 10,
-    @Query('title') title: string,
-    @Query('sort') sort: SortOptions = 'DESC',
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+    @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
+    @Query('title') title?: string,
+    @Query('sort') sort?: SortOptions,
     @Query(
       'tags',
       new ParseArrayPipe({ items: String, separator: ',', optional: true }),
     )
-    tags: string[],
+    tags?: string[],
     @Query(
       'artTypes',
       new ParseArrayPipe({ items: String, separator: ',', optional: true }),
     )
-    artTypes: ArtType[],
+    artTypes?: ArtType[],
   ) {
     const paginationOptions = {
       page,
@@ -57,11 +51,14 @@ export class PostsController {
     const filterOptions: FilterOptions = {
       title,
       tags,
-      sort,
+      sort: sort || 'DESC',
       artTypes,
     };
 
-    return this.postsService.paginate(paginationOptions, filterOptions);
+    return this.postsService.getPostListPaginateWithFilter(
+      paginationOptions,
+      filterOptions,
+    );
   }
 
   @Get(':id')
