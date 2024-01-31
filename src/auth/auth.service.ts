@@ -9,17 +9,23 @@ import { UserEntity } from '../users/entity/user.entity';
 
 @Injectable()
 export class AuthService {
-  private readonly tokenOptionBase = {
-    domain: this.configService.get('DOMAIN'),
-    path: '/',
-    httpOnly: true,
+  private readonly tokenOptionBase: {
+    domain: string;
+    path: string;
+    httpOnly: boolean;
   };
 
   constructor(
     private userService: UsersService,
     private jwtService: JwtService,
     private configService: ConfigService,
-  ) {}
+  ) {
+    this.tokenOptionBase = {
+      domain: this.configService.get('DOMAIN'),
+      path: '/',
+      httpOnly: true,
+    };
+  }
 
   async signUp(signUpDto: SignUpDto) {
     const salt = await bcrypt.genSalt();
