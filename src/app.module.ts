@@ -17,6 +17,8 @@ import * as Joi from 'joi';
       ignoreEnvFile: process.env.NODE_ENV === 'prod',
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().required(),
+        DOMAIN_URL: Joi.string().required(),
+        DOMAIN: Joi.string().required(),
         DATABASE_TYPE: Joi.string().valid('postgres').required(),
         DATABASE_HOST: Joi.string().required(),
         DATABASE_PORT: Joi.number().required(),
