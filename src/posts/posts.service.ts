@@ -29,7 +29,9 @@ export class PostsService {
     paginationOptions: IPaginationOptions,
     filterOptions: FilterOptions,
   ): Promise<Pagination<PostEntity>> {
-    const queryBuilder = this.postsRepository.createQueryBuilder('post');
+    const queryBuilder = this.postsRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.img', 'img');
 
     if (filterOptions.title) {
       queryBuilder.andWhere('post.title like :title', {
