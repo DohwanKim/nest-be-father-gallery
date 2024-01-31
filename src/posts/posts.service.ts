@@ -4,6 +4,19 @@ import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
+import {
+  paginate,
+  IPaginationOptions,
+  Pagination,
+} from 'nestjs-typeorm-paginate';
+
+export type SortOptions = 'ASC' | 'DESC';
+export type FilterOptions = {
+  title?: string;
+  tags?: string[];
+  sort?: SortOptions;
+  artTypes?: string[];
+};
 
 @Injectable()
 export class PostsService {
@@ -12,8 +25,32 @@ export class PostsService {
     private postsRepository: Repository<PostEntity>,
   ) {}
 
-  async getAllPost(): Promise<PostEntity[]> {
-    return await this.postsRepository.find();
+  async getPostListPaginateWithFilter(
+    paginationOptions: IPaginationOptions,
+    filterOptions: FilterOptions,
+  ): Promise<Pagination<PostEntity>> {
+    const queryBuilder = this.postsRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.img', 'img');
+
+    if (filterOptions.title) {
+      queryBuilder.andWhere('post.title like :title', {
+        title: `%${filterOptions.title}%`,
+      });
+    }
+    if (filterOptions.tags && filterOptions.tags.length > 0) {
+      queryBuilder.andWhere('post.tags && :tags', { tags: filterOptions.tags });
+    }
+    if (filterOptions.sort) {
+      queryBuilder.orderBy('post.createAt', filterOptions.sort);
+    }
+    if (filterOptions.artTypes && filterOptions.artTypes.length > 0) {
+      queryBuilder.andWhere('post.artType IN (:...artTypes)', {
+        artTypes: filterOptions.artTypes,
+      });
+    }
+
+    return paginate<PostEntity>(queryBuilder, paginationOptions);
   }
 
   async getOnePost(id: number): Promise<PostEntity> {

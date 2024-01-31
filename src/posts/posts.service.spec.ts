@@ -1,8 +1,9 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { PostsService } from './posts.service';
+import { FilterOptions, PostsService } from './posts.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { ArtType, PostEntity } from './entity/post.entity';
 import { Repository } from 'typeorm';
+import { paginate } from 'nestjs-typeorm-paginate';
 
 const mockRepository = {
   find: jest.fn(),
@@ -10,9 +11,12 @@ const mockRepository = {
   create: jest.fn(),
   save: jest.fn(),
   delete: jest.fn(),
+  createQueryBuilder: jest.fn(),
 };
 
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
+
+jest.mock('nestjs-typeorm-paginate');
 
 describe('PostsService', () => {
   let service: PostsService;
@@ -38,26 +42,52 @@ describe('PostsService', () => {
   });
 
   describe('getAllPost', () => {
-    it('should return an array', async () => {
-      const result = [
+    it('should return an array of posts', async () => {
+      const expectedResult = [
         {
-          id: 2,
+          id: 1,
           createAt: '2024-01-18T08:56:02.721Z',
           updateAt: '2024-01-18T08:56:02.721Z',
           version: 2,
-          title: 'init title',
+          title: 'title',
           artType: 'NONE' as ArtType,
           canvasSize: '100x100',
           price: 100,
           frameType: '도화지',
           contents: '게시글',
-          tags: [],
+          tags: ['tag'],
           img: null,
         },
       ];
+      const paginationOptions = {
+        page: 1,
+        limit: 10,
+        route: 'http://localhost:3000/posts',
+      };
+      const filterOptions: FilterOptions = {
+        title: 'title',
+        tags: ['tag'],
+        sort: 'DESC',
+        artTypes: ['NONE'],
+      };
+      const queryBuilder = {
+        andWhere: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+      };
 
-      postsRepository.find.mockReturnValue(result);
-      expect(await service.getAllPost()).toEqual(result);
+      jest
+        .spyOn(postsRepository, 'createQueryBuilder')
+        .mockReturnValue(queryBuilder);
+      (paginate as jest.Mock).mockResolvedValue(expectedResult);
+
+      const result = await service.getPostListPaginateWithFilter(
+        paginationOptions,
+        filterOptions,
+      );
+
+      expect(result).toMatchObject(expectedResult);
+      expect(queryBuilder.andWhere).toHaveBeenCalledTimes(3);
+      expect(queryBuilder.orderBy).toHaveBeenCalled();
     });
   });
 

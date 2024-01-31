@@ -9,13 +9,28 @@ import { CreatePostDto } from '../src/posts/dto/create-post.dto';
 import { ArtType } from '../src/posts/entity/post.entity';
 import * as cookieParser from 'cookie-parser';
 
+type postType = {
+  id: number;
+  createAt: Date;
+  updateAt: Date;
+  version: number;
+  title: string;
+  artType: ArtType;
+  canvasSize: string;
+  price: number;
+  frameType: string;
+  contents: string;
+  tags: string[];
+  img: null | object;
+};
+
 const testUser = {
   username: 'testuser',
   password: 'Testpass123!',
 };
 
 const testPost: CreatePostDto = {
-  title: 'Test Post',
+  title: 'test post',
   artType: 'NONE' as ArtType,
   canvasSize: '100x100',
   price: 10000,
@@ -84,14 +99,99 @@ describe('Posts (e2e)', () => {
   });
 
   describe('GET /posts', () => {
+    beforeAll(async () => {
+      await request(app.getHttpServer())
+        .post('/posts')
+        .send({
+          ...testPost,
+          title: 'filterTitle',
+          artType: 'ACRYLIC_PAINTING',
+        });
+      await request(app.getHttpServer())
+        .post('/posts')
+        .send({
+          ...testPost,
+          title: 'other1',
+          artType: 'WATERCOLOR',
+          tags: ['other1'],
+        });
+      await request(app.getHttpServer())
+        .post('/posts')
+        .send({
+          ...testPost,
+          title: 'other1',
+          artType: 'PENCIL_DRAWING',
+          tags: ['other1', 'other2'],
+        });
+      await request(app.getHttpServer())
+        .post('/posts')
+        .send({
+          ...testPost,
+          title: 'other1',
+          artType: 'OIL_PAINTING',
+          tags: ['other1', 'other2', 'other3'],
+        });
+
+      return true;
+    });
+
     it('should return 200', () => {
       return request(app.getHttpServer())
         .get('/posts')
         .expect(200)
         .expect((res) => {
-          expect(res.body).toBeInstanceOf(Array);
-          expect(res.body[0]).toEqual(expect.objectContaining(testPost));
-          newPostId = res.body[0].id;
+          const { items } = res.body;
+
+          expect(items).toBeInstanceOf(Array);
+          expect(items[items.length - 1]).toEqual(
+            expect.objectContaining(testPost),
+          );
+          newPostId = items[items.length - 1].id;
+        });
+    });
+
+    it('should return posts with specified title', () => {
+      return request(app.getHttpServer())
+        .get('/posts?title=filter')
+        .expect(200)
+        .expect((res) => {
+          const { items } = res.body;
+
+          expect(items).toBeInstanceOf(Array);
+          expect(items.length).toBe(1);
+          items.forEach((item: postType) => {
+            expect(item.title).toContain('filter');
+          });
+        });
+    });
+
+    it('should return posts with specified artType', () => {
+      return request(app.getHttpServer())
+        .get('/posts?artTypes=WATERCOLOR')
+        .expect(200)
+        .expect((res) => {
+          const { items } = res.body;
+
+          expect(items).toBeInstanceOf(Array);
+          expect(items.length).toBe(1);
+          items.forEach((item: postType) => {
+            expect(item.artType).toBe('WATERCOLOR');
+          });
+        });
+    });
+
+    it('should return posts with specified tags', () => {
+      return request(app.getHttpServer())
+        .get('/posts?tags=other1')
+        .expect(200)
+        .expect((res) => {
+          const { items } = res.body;
+
+          expect(items).toBeInstanceOf(Array);
+          expect(items.length).toBe(3);
+          items.forEach((item: postType) => {
+            expect(item.tags).toContain('other1');
+          });
         });
     });
   });
