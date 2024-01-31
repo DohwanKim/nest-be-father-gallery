@@ -48,7 +48,7 @@ describe('ImagesService', () => {
   describe('getUploadUrl', () => {
     it('should get upload URL from Cloudflare Image service', async () => {
       const accountId = configService.get('CLOUDFLARE_IMAGE_ACCOUNT_ID');
-      const expectedUploadUrl = 'https://cloudflare.com/upload';
+      const expectedResult = { uploadUrl: 'https://cloudflare.com/upload' };
 
       mockAxios
         .onPost(
@@ -58,13 +58,11 @@ describe('ImagesService', () => {
           success: true,
           result: {
             id: 'image_id',
-            uploadURL: expectedUploadUrl,
+            uploadURL: expectedResult.uploadUrl,
           },
         });
 
-      const uploadUrl = await service.getUploadUrl();
-
-      expect(uploadUrl).toEqual(expectedUploadUrl);
+      expect(await service.getUploadUrl()).toEqual(expectedResult);
     });
 
     it('should handle failure to get upload URL from Cloudflare Image is showdown', async () => {
