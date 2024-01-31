@@ -25,7 +25,7 @@ export class PostsService {
     private postsRepository: Repository<PostEntity>,
   ) {}
 
-  async paginate(
+  async getPostListPaginateWithFilter(
     paginationOptions: IPaginationOptions,
     filterOptions: FilterOptions,
   ): Promise<Pagination<PostEntity>> {
