@@ -8,6 +8,7 @@ import {
   ConflictException,
   InternalServerErrorException,
   NotFoundException,
+  UnauthorizedException,
 } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 
@@ -117,7 +118,7 @@ describe('UsersService', () => {
 
       usersRepository.findOne.mockResolvedValue(undefined);
       const result = service.findOneByUsername(username);
-      await expect(result).rejects.toBeInstanceOf(NotFoundException);
+      await expect(result).rejects.toBeInstanceOf(UnauthorizedException);
     });
   });
 

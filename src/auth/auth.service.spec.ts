@@ -29,6 +29,8 @@ const mockConfigService = {
       return 'test';
     } else if (key === 'JWT_REFRESH_TOKEN_EXPIRATION_TIME') {
       return '3600s';
+    } else if (key === 'DOMAIN') {
+      return 'localhost';
     }
     return null;
   }),
@@ -140,7 +142,7 @@ describe('AuthService', () => {
 
       usersService.findOneByUsername.mockReturnValue(null);
       await expect(authService.signIn(signInDto)).rejects.toThrow(
-        new UnauthorizedException('Please check your login credentials'),
+        new UnauthorizedException('invalid password'),
       );
     });
 
@@ -153,7 +155,7 @@ describe('AuthService', () => {
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
       usersService.findOneByUsername.mockReturnValue(signInDto);
       await expect(authService.signIn(signInDto)).rejects.toThrow(
-        new UnauthorizedException('Please check your login credentials'),
+        new UnauthorizedException('invalid password'),
       );
     });
   });
@@ -170,7 +172,7 @@ describe('AuthService', () => {
       const expiresIn = configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME');
       const result = {
         accessToken,
-        domain: 'localhost',
+        domain: configService.get('DOMAIN'),
         path: '/',
         httpOnly: true,
       };
@@ -193,7 +195,7 @@ describe('AuthService', () => {
       const expiresIn = configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME');
       const result = {
         refreshToken,
-        domain: 'localhost',
+        domain: configService.get('DOMAIN'),
         path: '/',
         httpOnly: true,
       };
@@ -209,13 +211,13 @@ describe('AuthService', () => {
   describe('getCookiesForLogOut', () => {
     it('should return a cookie', () => {
       const accessOption = {
-        domain: 'localhost',
+        domain: configService.get('DOMAIN'),
         path: '/',
         httpOnly: true,
         maxAge: 0,
       };
       const refreshOption = {
-        domain: 'localhost',
+        domain: configService.get('DOMAIN'),
         path: '/',
         httpOnly: true,
         maxAge: 0,

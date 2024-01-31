@@ -11,7 +11,7 @@ const mockRepository = {
   create: jest.fn(),
   save: jest.fn(),
   delete: jest.fn(),
-  createQueryBuilder: jest.fn(),
+  createQueryBuilder: jest.fn().mockReturnThis(),
 };
 
 type MockRepository<T = any> = Partial<Record<keyof Repository<T>, jest.Mock>>;
@@ -70,14 +70,15 @@ describe('PostsService', () => {
         sort: 'DESC',
         artTypes: ['NONE'],
       };
-      const queryBuilder = {
+      const mockQueryBuilder = {
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
         andWhere: jest.fn().mockReturnThis(),
         orderBy: jest.fn().mockReturnThis(),
       };
 
       jest
         .spyOn(postsRepository, 'createQueryBuilder')
-        .mockReturnValue(queryBuilder);
+        .mockReturnValue(mockQueryBuilder);
       (paginate as jest.Mock).mockResolvedValue(expectedResult);
 
       const result = await service.getPostListPaginateWithFilter(
@@ -85,9 +86,14 @@ describe('PostsService', () => {
         filterOptions,
       );
 
+      expect(mockRepository.createQueryBuilder).toHaveBeenCalledWith('post');
+      expect(mockQueryBuilder.leftJoinAndSelect).toHaveBeenCalledWith(
+        'post.img',
+        'img',
+      );
       expect(result).toMatchObject(expectedResult);
-      expect(queryBuilder.andWhere).toHaveBeenCalledTimes(3);
-      expect(queryBuilder.orderBy).toHaveBeenCalled();
+      expect(mockQueryBuilder.andWhere).toHaveBeenCalledTimes(3);
+      expect(mockQueryBuilder.orderBy).toHaveBeenCalled();
     });
   });
 
