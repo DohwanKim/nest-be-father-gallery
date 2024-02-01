@@ -58,6 +58,9 @@ export class PostEntity {
   })
   price: number;
 
+  @Column({ type: 'boolean', default: false, comment: '판매 여부' })
+  isSold: boolean;
+
   @Column({
     type: 'varchar',
     length: 100,
