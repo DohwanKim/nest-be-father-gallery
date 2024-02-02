@@ -49,13 +49,13 @@ export class AuthController {
           type: 'string',
           description: '액세스 토큰',
           example:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJhZG1pbjIiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDY2OTc1NjksImV4cCI6MTcwNjY5OTM2OX0.6U3QBmUnlsif23a4-XemxU5XbxnfFHFpl7o3gWwrxjA', // 예제값
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwidXNlcm5hbWUiOiJhZG1pbjIiLCJyb2xlIjoiQURNSU4iLCJpYXQiOjE3MDY2OTc1NjksImV4cCI6MTcwNjY5OTM2OX0.6U3QBmUnlsif23a4-XemxU5XbxnfFHFpl7o3gWwrxjA',
         },
         refreshToken: {
           type: 'string',
           description: '리플래시 토큰',
           example:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzA2Njk3NTY5LCJleHAiOjE3MDczMDIzNjl9.aCcM8z84roiMGKQZWOVGr_b8jtvbkDp5EGQy3W63nqM', // 예제값
+            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NSwiaWF0IjoxNzA2Njk3NTY5LCJleHAiOjE3MDczMDIzNjl9.aCcM8z84roiMGKQZWOVGr_b8jtvbkDp5EGQy3W63nqM',
         },
       },
     },
