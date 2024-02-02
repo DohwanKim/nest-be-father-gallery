@@ -19,6 +19,8 @@ Nest.js로 개발한 Backend 프로젝트 입니다.<br>
 
 ## 구현 된 기능
 - 게시글을 위한 기본적인 CRUD 기능을 구현하였습니다.<br>
+  - 게시글 작성, 수정, 삭제, 조회 기능을 구현하였습니다.<br>
+  - 페이지네이션 기능과 검색 기능을 구현하였습니다.<br>
 - TypeORM을 이용하여 Postgres DB와 연동되고 있습니다.<br>
 - Cloudflare Image를 위한 API를 구현하였습니다.<br>
 - JWT를 이용하여 Access Token, Refresh Token를 이용하여 인증을 구현 하였습니다.<br>
