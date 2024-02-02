@@ -18,7 +18,11 @@ import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAccessGuard } from '../auth/guards/jwt-access.guard';
 import { ConfigService } from '@nestjs/config';
+import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { ApiGetAllPostDecorator } from './decorators/api-get-all-post.decorator';
+import { ApiGetOnePostDecorator } from './decorators/api-get-one-post.decorator';
 
+@ApiTags('Posts')
 @Controller('posts')
 export class PostsController {
   constructor(
@@ -27,8 +31,10 @@ export class PostsController {
   ) {}
 
   @Get()
+  @ApiGetAllPostDecorator()
   getAllPost(
-    @Query('page', new DefaultValuePipe(1), ParseIntPipe) page?: number,
+    @Query('page', new DefaultValuePipe(1), ParseIntPipe)
+    page?: number,
     @Query('limit', new DefaultValuePipe(10), ParseIntPipe) limit?: number,
     @Query('title') title?: string,
     @Query('sort') sort?: SortOptions,
@@ -62,23 +68,35 @@ export class PostsController {
   }
 
   @Get(':id')
+  @ApiGetOnePostDecorator()
   getOnePost(@Param('id') postId: number): Promise<PostEntity> {
     return this.postsService.getOnePost(postId);
   }
 
   @Post()
+  @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
   createPost(@Body() postData: CreatePostDto): Promise<PostEntity> {
     return this.postsService.createPost(postData);
   }
 
   @Patch(':id')
+  @ApiResponse({
+    description: '게시글 수정',
+    type: Boolean,
+  })
+  @ApiBearerAuth()
   @UseGuards(JwtAccessGuard)
   updatePost(@Param('id') postId: number, @Body() updateData: UpdatePostDto) {
     return this.postsService.updatePost(postId, updateData);
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
+  @ApiResponse({
+    description: '게시글 삭제',
+    type: Boolean,
+  })
   @UseGuards(JwtAccessGuard)
   deletePost(@Param('id') postId: number) {
     return this.postsService.deletePost(postId);

@@ -23,6 +23,7 @@ Nest.js로 개발한 Backend 프로젝트 입니다.<br>
 - Cloudflare Image를 위한 API를 구현하였습니다.<br>
 - JWT를 이용하여 Access Token, Refresh Token를 이용하여 인증을 구현 하였습니다.<br>
 - Test의 경우 Unit Test는 Jest, E2E Test는 Supertest를 사용하여 작성되었습니다.
+- Swagger를 이용하여 API 문서화를 구현하였습니다.
 
 
 ## 설명
@@ -34,9 +35,9 @@ Nest.js로 개발한 Backend 프로젝트 입니다.<br>
 
 ## 차후 진행할 작업
 - [x] 페이지네이션 구현
+- [x] Swagger를 이용한 API 문서화
 - [ ] AWS Lightsail을 이용한 배포
 - [ ] CI/CD 구축
-- [ ] (option) Swagger를 이용한 API 문서화
 - [ ] (option) 차후 프론트엔드 작성 후 Mono Repo로 변경
 
 ## Installation
@@ -70,6 +71,9 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
+
+## API Documentation
+If you want to see the Swagger API documentation, go to `localhost:3000/api`.<br>
 
 
 ## License
