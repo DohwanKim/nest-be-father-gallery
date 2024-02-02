@@ -35,6 +35,8 @@ export class AuthService {
       password: hashedPassword,
     };
     await this.userService.createUser(newUser);
+
+    return true;
   }
 
   async signIn(signInDto: SignInDto) {
