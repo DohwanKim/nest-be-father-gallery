@@ -13,6 +13,11 @@ async function bootstrap() {
     .addTag('father-gallery')
     .build();
 
+  app.enableCors({
+    origin: ['http://localhost:3001'],
+    credentials: true,
+    exposedHeaders: ['Authorization', 'accessToken', 'refreshToken'],
+  });
   app.use(cookieParser());
   app.useGlobalPipes(
     new ValidationPipe({
