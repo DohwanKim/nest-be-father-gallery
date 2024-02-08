@@ -19,6 +19,7 @@ async function bootstrap() {
     exposedHeaders: ['Authorization', 'accessToken', 'refreshToken'],
   });
   app.use(cookieParser());
+  app.setGlobalPrefix('api');
   app.useGlobalPipes(
     new ValidationPipe({
       whitelist: true,
