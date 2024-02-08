@@ -9,6 +9,8 @@ import { UserEntity } from '../users/entity/user.entity';
 
 jest.mock('bcrypt');
 
+type SameSiteType = boolean | 'none' | 'lax' | 'strict';
+
 const mockUsersService = {
   findOneByUsername: jest.fn(),
   findOneById: jest.fn(),
@@ -31,6 +33,10 @@ const mockConfigService = {
       return '3600s';
     } else if (key === 'DOMAIN') {
       return 'localhost';
+    } else if (key === 'JWT_ACCESS_TOKEN_MAX_AGE') {
+      return 3600;
+    } else if (key === 'JWT_REFRESH_TOKEN_MAX_AGE') {
+      return 3600;
     }
     return null;
   }),
@@ -87,14 +93,20 @@ describe('AuthService', () => {
       const accessTokenData = {
         accessToken: 'accessToken',
         domain: 'localhost',
-        path: '/',
+        secure: true,
+        sameSite: 'none' as SameSiteType,
         httpOnly: true,
+        maxAge: 3600,
+        path: '/',
       };
       const refreshTokenData = {
         refreshToken: 'refreshToken',
         domain: 'localhost',
-        path: '/',
+        secure: true,
+        sameSite: 'none' as SameSiteType,
         httpOnly: true,
+        maxAge: 3600,
+        path: '/',
       };
       const signInDto = {
         username: 'testtesttest',
@@ -170,16 +182,23 @@ describe('AuthService', () => {
       const accessToken = 'accessToken';
       const secret = configService.get('JWT_ACCESS_TOKEN_SECRET');
       const expiresIn = configService.get('JWT_ACCESS_TOKEN_EXPIRATION_TIME');
+      const maxAge = configService.get('JWT_ACCESS_TOKEN_MAX_AGE');
       const result = {
         accessToken,
         domain: configService.get('DOMAIN'),
-        path: '/',
+        secure: true,
+        sameSite: 'none' as SameSiteType,
         httpOnly: true,
+        maxAge: maxAge,
+        path: '/',
       };
 
       (jwtService.sign as jest.Mock).mockReturnValue(accessToken);
       expect(jwtService.sign(user, { secret, expiresIn })).toEqual(accessToken);
-      expect(authService.getCookieWithJwtAccessToken(user)).toEqual(result);
+      expect(authService.getCookieWithJwtAccessToken(user)).toEqual({
+        ...result,
+        maxAge: maxAge * 1000,
+      });
     });
   });
 
@@ -193,11 +212,15 @@ describe('AuthService', () => {
       const refreshToken = 'refreshToken';
       const secret = configService.get('JWT_REFRESH_TOKEN_SECRET');
       const expiresIn = configService.get('JWT_REFRESH_TOKEN_EXPIRATION_TIME');
+      const maxAge = configService.get('JWT_REFRESH_TOKEN_MAX_AGE');
       const result = {
         refreshToken,
         domain: configService.get('DOMAIN'),
-        path: '/',
+        secure: true,
+        sameSite: 'none' as SameSiteType,
         httpOnly: true,
+        maxAge: maxAge * 1000,
+        path: '/',
       };
 
       (jwtService.sign as jest.Mock).mockReturnValue(refreshToken);
@@ -212,15 +235,19 @@ describe('AuthService', () => {
     it('should return a cookie', () => {
       const accessOption = {
         domain: configService.get('DOMAIN'),
-        path: '/',
+        secure: true,
+        sameSite: 'none' as SameSiteType,
         httpOnly: true,
         maxAge: 0,
+        path: '/',
       };
       const refreshOption = {
         domain: configService.get('DOMAIN'),
-        path: '/',
+        secure: true,
+        sameSite: 'none' as SameSiteType,
         httpOnly: true,
         maxAge: 0,
+        path: '/',
       };
       const result = {
         accessOption,

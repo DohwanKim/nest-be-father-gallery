@@ -12,6 +12,8 @@ export class AuthService {
   private readonly tokenOptionBase: {
     domain: string;
     path: string;
+    sameSite: boolean | 'none' | 'lax' | 'strict';
+    secure: boolean;
     httpOnly: boolean;
   };
 
@@ -23,6 +25,8 @@ export class AuthService {
     this.tokenOptionBase = {
       domain: this.configService.get('DOMAIN'),
       path: '/',
+      secure: true,
+      sameSite: 'none',
       httpOnly: true,
     };
   }
@@ -67,6 +71,7 @@ export class AuthService {
 
     return {
       ...this.tokenOptionBase,
+      maxAge: Number(this.configService.get('JWT_ACCESS_TOKEN_MAX_AGE')) * 1000,
       accessToken: token,
     };
   }
@@ -80,6 +85,8 @@ export class AuthService {
 
     return {
       ...this.tokenOptionBase,
+      maxAge:
+        Number(this.configService.get('JWT_REFRESH_TOKEN_MAX_AGE')) * 1000,
       refreshToken: token,
     };
   }

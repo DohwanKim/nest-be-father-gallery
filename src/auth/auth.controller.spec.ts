@@ -14,6 +14,8 @@ const mockUsersService = {
   removeRefreshToken: jest.fn(),
 };
 
+type SameSiteType = boolean | 'none' | 'lax' | 'strict';
+
 describe('AuthController', () => {
   let controller: AuthController;
   let usersService: UsersService;
@@ -74,12 +76,18 @@ describe('AuthController', () => {
           domain: 'localhost',
           path: '/',
           httpOnly: true,
+          maxAge: 3600,
+          secure: true,
+          sameSite: 'none' as SameSiteType,
         },
         refreshTokenData: {
           refreshToken,
           domain: 'localhost',
           path: '/',
           httpOnly: true,
+          maxAge: 3600,
+          secure: true,
+          sameSite: 'none' as SameSiteType,
         },
       }));
 
@@ -92,11 +100,21 @@ describe('AuthController', () => {
         domain: 'localhost',
         path: '/',
         httpOnly: true,
+        maxAge: 3600,
+        secure: true,
+        sameSite: 'none' as SameSiteType,
       });
       expect(response.cookie).toHaveBeenCalledWith(
         'refreshToken',
         refreshToken,
-        { domain: 'localhost', path: '/', httpOnly: true },
+        {
+          domain: 'localhost',
+          path: '/',
+          httpOnly: true,
+          maxAge: 3600,
+          secure: true,
+          sameSite: 'none' as SameSiteType,
+        },
       );
     });
   });
@@ -115,13 +133,17 @@ describe('AuthController', () => {
         domain: 'localhost',
         path: '/',
         httpOnly: true,
-        maxAge: 0,
+        maxAge: 3600,
+        secure: true,
+        sameSite: 'none' as SameSiteType,
       };
       const refreshOption = {
         domain: 'localhost',
         path: '/',
         httpOnly: true,
-        maxAge: 0,
+        maxAge: 3600,
+        secure: true,
+        sameSite: 'none' as SameSiteType,
       };
 
       jest
@@ -153,11 +175,17 @@ describe('AuthController', () => {
         domain: 'localhost',
         path: '/',
         httpOnly: true,
+        sameSite: 'none' as SameSiteType,
+        maxAge: 3600,
+        secure: true,
       };
       const accessOption = {
         domain: 'localhost',
         path: '/',
         httpOnly: true,
+        sameSite: 'none' as SameSiteType,
+        maxAge: 3600,
+        secure: true,
       };
 
       jest
