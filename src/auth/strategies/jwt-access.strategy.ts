@@ -4,6 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { Request } from 'express';
+import { ErrorMessages } from '../../constants/error-messages.enum';
 
 @Injectable()
 export class JwtAccessStrategy extends PassportStrategy(
@@ -21,6 +22,7 @@ export class JwtAccessStrategy extends PassportStrategy(
           return request?.cookies?.accessToken;
         },
       ]),
+      ignoreExpiration: true,
       passReqToCallback: true,
     });
   }
@@ -30,7 +32,7 @@ export class JwtAccessStrategy extends PassportStrategy(
     const user = await this.usersService.findOneByUsername(username);
 
     if (!user) {
-      throw new UnauthorizedException();
+      throw new UnauthorizedException(ErrorMessages.INVALID_ACCESS_TOKEN);
     }
 
     return {

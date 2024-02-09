@@ -4,6 +4,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { UsersService } from '../../users/users.service';
 import { Request } from 'express';
+import { ErrorMessages } from '../../constants/error-messages.enum';
 
 @Injectable()
 export class JwtRefreshStrategy extends PassportStrategy(
@@ -21,6 +22,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
           return request?.cookies?.refreshToken;
         },
       ]),
+      ignoreExpiration: true,
       passReqToCallback: true,
     });
   }
@@ -35,7 +37,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
     );
 
     if (!user) {
-      throw new UnauthorizedException('Invalid refresh token');
+      throw new UnauthorizedException(ErrorMessages.INVALID_REFRESH_TOKEN);
     }
 
     return user;
