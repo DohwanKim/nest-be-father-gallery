@@ -18,7 +18,7 @@ export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {
     }
 
     try {
-      jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
+      await super.canActivate(context);
     } catch (err) {
       if (err instanceof jwt.TokenExpiredError) {
         throw new UnauthorizedException(ErrorMessages.INVALID_REFRESH_TOKEN);

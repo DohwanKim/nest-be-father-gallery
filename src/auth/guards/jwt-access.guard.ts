@@ -18,7 +18,7 @@ export class JwtAccessGuard extends AuthGuard('jwt-access') {
     }
 
     try {
-      jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET);
+      await super.canActivate(context);
     } catch (err) {
       if (err instanceof jwt.TokenExpiredError) {
         throw new UnauthorizedException(ErrorMessages.INVALID_ACCESS_TOKEN);
