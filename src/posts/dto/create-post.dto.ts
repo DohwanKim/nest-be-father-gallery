@@ -7,9 +7,9 @@ import {
   MinLength,
 } from 'class-validator';
 import { ImageEntity } from '../../images/entity/image.entity';
-import { ArtType } from '../entity/post.entity';
 import { Type } from 'class-transformer';
 import { ApiProperty } from '@nestjs/swagger';
+import { ArtType } from '../../constants/post.enum';
 
 export class CreatePostDto {
   @ApiProperty({

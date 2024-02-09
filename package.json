@@ -103,6 +103,7 @@
       ".module.ts",
       ".strategy.ts",
       ".guard.ts",
+      ".enum.ts",
       "main.ts"
     ]
   },

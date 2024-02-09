@@ -2,8 +2,8 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { PostsController } from './posts.controller';
 import { PostsService } from './posts.service';
 import { NotFoundException } from '@nestjs/common';
-import { ArtType } from './entity/post.entity';
 import { ConfigService } from '@nestjs/config';
+import { ArtType } from '../constants/post.enum';
 
 const mockService = {
   getPostListPaginateWithFilter: jest.fn(),

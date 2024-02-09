@@ -9,14 +9,7 @@ import {
   VersionColumn,
 } from 'typeorm';
 import { ImageEntity } from '../../images/entity/image.entity';
-
-export enum ArtType {
-  'NONE' = 'NONE',
-  'WATERCOLOR' = 'WATERCOLOR',
-  'PENCIL_DRAWING' = 'PENCIL_DRAWING',
-  'ACRYLIC_PAINTING' = 'ACRYLIC_PAINTING',
-  'OIL_PAINTING' = 'OIL_PAINTING',
-}
+import { ArtType } from '../../constants/post.enum';
 
 @Entity()
 export class PostEntity {

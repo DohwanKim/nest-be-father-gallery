@@ -1,9 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { FilterOptions, PostsService } from './posts.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ArtType, PostEntity } from './entity/post.entity';
+import { PostEntity } from './entity/post.entity';
 import { Repository } from 'typeorm';
 import { paginate } from 'nestjs-typeorm-paginate';
+import { ArtType } from '../constants/post.enum';
 
 const mockRepository = {
   find: jest.fn(),

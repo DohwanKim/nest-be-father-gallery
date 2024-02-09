@@ -6,8 +6,8 @@ import { mockAuthGuard } from './mock-auth-guard';
 import { JwtAccessGuard } from '../src/auth/guards/jwt-access.guard';
 import * as request from 'supertest';
 import { CreatePostDto } from '../src/posts/dto/create-post.dto';
-import { ArtType } from '../src/posts/entity/post.entity';
 import * as cookieParser from 'cookie-parser';
+import { ArtType } from '../src/constants/post.enum';
 
 type postType = {
   id: number;

@@ -13,7 +13,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { FilterOptions, PostsService, SortOptions } from './posts.service';
-import { ArtType, PostEntity } from './entity/post.entity';
+import { PostEntity } from './entity/post.entity';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
 import { JwtAccessGuard } from '../auth/guards/jwt-access.guard';
@@ -21,6 +21,7 @@ import { ConfigService } from '@nestjs/config';
 import { ApiBearerAuth, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { ApiGetAllPostDecorator } from './decorators/api-get-all-post.decorator';
 import { ApiGetOnePostDecorator } from './decorators/api-get-one-post.decorator';
+import { ArtType } from '../constants/post.enum';
 
 @ApiTags('Posts')
 @Controller('posts')
