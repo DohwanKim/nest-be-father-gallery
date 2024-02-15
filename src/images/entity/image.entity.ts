@@ -1,5 +1,6 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { PostEntity } from '../../posts/entity/post.entity';
+import { IsOptional } from 'class-validator';
 
 @Entity()
 export class ImageEntity {
@@ -13,6 +14,7 @@ export class ImageEntity {
   filename: string;
 
   @Column({ type: 'jsonb', nullable: true })
+  @IsOptional()
   metadata: { [key: string]: string };
 
   @Column({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
