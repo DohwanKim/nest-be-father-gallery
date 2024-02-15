@@ -14,18 +14,21 @@ export class JwtAccessGuard extends AuthGuard('jwt-access') {
     const accessToken = request?.cookies?.accessToken;
 
     if (!accessToken) {
-      throw new UnauthorizedException(ErrorMessages.INVALID_ACCESS_TOKEN);
+      throw new UnauthorizedException(ErrorMessages.JWT_ACCESS_TOKEN_INVALID);
     }
 
     try {
-      await super.canActivate(context);
+      jwt.verify(accessToken, process.env.JWT_ACCESS_TOKEN_SECRET);
     } catch (err) {
       if (err instanceof jwt.TokenExpiredError) {
-        throw new UnauthorizedException(ErrorMessages.INVALID_ACCESS_TOKEN);
+        throw new UnauthorizedException(
+          ErrorMessages.JWT_ACCESS_TOKEN_UNAUTHORIZED,
+        );
       } else {
-        throw new UnauthorizedException(ErrorMessages.INVALID_ACCESS_TOKEN);
+        throw new UnauthorizedException(ErrorMessages.JWT_ACCESS_TOKEN_INVALID);
       }
     }
+    await super.canActivate(context);
 
     return true;
   }
