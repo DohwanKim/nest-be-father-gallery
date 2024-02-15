@@ -6,6 +6,7 @@ import { UsersService } from '../users/users.service';
 import { SignUpDto } from './dto/sign-up.dto';
 import { ConfigService } from '@nestjs/config';
 import { UserEntity } from '../users/entity/user.entity';
+import { ErrorMessages } from '../constants/error-messages.enum';
 
 @Injectable()
 export class AuthService {
@@ -58,7 +59,7 @@ export class AuthService {
 
       return { accessTokenData, refreshTokenData };
     } else {
-      throw new UnauthorizedException('invalid password');
+      throw new UnauthorizedException(ErrorMessages.INVALID_PASSWORD);
     }
   }
 

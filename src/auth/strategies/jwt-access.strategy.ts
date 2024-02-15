@@ -22,7 +22,6 @@ export class JwtAccessStrategy extends PassportStrategy(
           return request?.cookies?.accessToken;
         },
       ]),
-      ignoreExpiration: true,
       passReqToCallback: true,
     });
   }
@@ -32,7 +31,7 @@ export class JwtAccessStrategy extends PassportStrategy(
     const user = await this.usersService.findOneByUsername(username);
 
     if (!user) {
-      throw new UnauthorizedException(ErrorMessages.INVALID_ACCESS_TOKEN);
+      throw new UnauthorizedException(ErrorMessages.JWT_ACCESS_TOKEN_INVALID);
     }
 
     return {

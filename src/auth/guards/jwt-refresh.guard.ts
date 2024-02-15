@@ -14,18 +14,23 @@ export class JwtRefreshGuard extends AuthGuard('jwt-refresh') {
     const refreshToken = request?.cookies?.refreshToken;
 
     if (!refreshToken) {
-      throw new UnauthorizedException(ErrorMessages.INVALID_REFRESH_TOKEN);
+      throw new UnauthorizedException(ErrorMessages.JWT_REFRESH_TOKEN_INVALID);
     }
 
     try {
-      await super.canActivate(context);
+      jwt.verify(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
     } catch (err) {
       if (err instanceof jwt.TokenExpiredError) {
-        throw new UnauthorizedException(ErrorMessages.INVALID_REFRESH_TOKEN);
+        throw new UnauthorizedException(
+          ErrorMessages.JWT_REFRESH_TOKEN_UNAUTHORIZED,
+        );
       } else {
-        throw new UnauthorizedException(ErrorMessages.INVALID_REFRESH_TOKEN);
+        throw new UnauthorizedException(
+          ErrorMessages.JWT_REFRESH_TOKEN_INVALID,
+        );
       }
     }
+    await super.canActivate(context);
 
     return true;
   }

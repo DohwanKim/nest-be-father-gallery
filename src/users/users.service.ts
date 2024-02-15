@@ -10,6 +10,7 @@ import { UserEntity } from './entity/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { ErrorMessages } from '../constants/error-messages.enum';
 
 @Injectable()
 export class UsersService {
@@ -34,7 +35,7 @@ export class UsersService {
 
   async findOneByUsername(username: string): Promise<UserEntity> {
     const user = await this.userRepository.findOne({ where: { username } });
-    if (!user) throw new UnauthorizedException('invalid ID');
+    if (!user) throw new UnauthorizedException(ErrorMessages.INVALID_ID);
     return user;
   }
 

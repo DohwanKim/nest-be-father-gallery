@@ -6,6 +6,7 @@ import { ConfigService } from '@nestjs/config';
 import * as bcrypt from 'bcrypt';
 import { UnauthorizedException } from '@nestjs/common';
 import { UserEntity } from '../users/entity/user.entity';
+import { ErrorMessages } from '../constants/error-messages.enum';
 
 jest.mock('bcrypt');
 
@@ -154,7 +155,7 @@ describe('AuthService', () => {
 
       usersService.findOneByUsername.mockReturnValue(null);
       await expect(authService.signIn(signInDto)).rejects.toThrow(
-        new UnauthorizedException('invalid password'),
+        new UnauthorizedException(ErrorMessages.INVALID_PASSWORD),
       );
     });
 
@@ -167,7 +168,7 @@ describe('AuthService', () => {
       (bcrypt.compare as jest.Mock).mockResolvedValue(false);
       usersService.findOneByUsername.mockReturnValue(signInDto);
       await expect(authService.signIn(signInDto)).rejects.toThrow(
-        new UnauthorizedException('invalid password'),
+        new UnauthorizedException(ErrorMessages.INVALID_PASSWORD),
       );
     });
   });

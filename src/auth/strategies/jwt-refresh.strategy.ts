@@ -22,7 +22,6 @@ export class JwtRefreshStrategy extends PassportStrategy(
           return request?.cookies?.refreshToken;
         },
       ]),
-      ignoreExpiration: true,
       passReqToCallback: true,
     });
   }
@@ -37,7 +36,7 @@ export class JwtRefreshStrategy extends PassportStrategy(
     );
 
     if (!user) {
-      throw new UnauthorizedException(ErrorMessages.INVALID_REFRESH_TOKEN);
+      throw new UnauthorizedException(ErrorMessages.JWT_REFRESH_TOKEN_INVALID);
     }
 
     return user;
