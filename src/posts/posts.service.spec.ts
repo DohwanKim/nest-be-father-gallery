@@ -138,6 +138,7 @@ describe('PostsService', () => {
         price: 100,
         frameType: '도화지',
         contents: '게시글',
+        isSold: false,
         tags: [],
         img: null,
       };

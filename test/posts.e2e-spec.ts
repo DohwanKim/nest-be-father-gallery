@@ -36,6 +36,7 @@ const testPost: CreatePostDto = {
   price: 10000,
   frameType: 'big canvas',
   tags: ['test', 'test2'],
+  isSold: false,
   contents: 'Test Content',
   img: null,
 };

@@ -1,4 +1,5 @@
 import {
+  IsBoolean,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -77,6 +78,14 @@ export class CreatePostDto {
   @IsString({ each: true })
   @IsOptional()
   tags: string[];
+
+  @ApiProperty({
+    example: false,
+    description: '판매 여부',
+    required: false,
+  })
+  @IsBoolean()
+  isSold: boolean;
 
   @ApiProperty({
     example: 'null | Cloudflare URL Object',
