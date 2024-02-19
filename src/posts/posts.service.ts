@@ -9,6 +9,7 @@ import {
   IPaginationOptions,
   Pagination,
 } from 'nestjs-typeorm-paginate';
+import { ImagesService } from '../images/images.service';
 
 export type SortOptions = 'ASC' | 'DESC';
 export type FilterOptions = {
@@ -23,6 +24,7 @@ export class PostsService {
   constructor(
     @InjectRepository(PostEntity)
     private postsRepository: Repository<PostEntity>,
+    private imagesService: ImagesService,
   ) {}
 
   async getPostListPaginateWithFilter(
@@ -67,12 +69,22 @@ export class PostsService {
   async updatePost(id: number, updateData: UpdatePostDto) {
     const target = await this.getOnePost(id);
     const updated = { ...target, ...updateData };
+
+    if (updateData.img && target.img.id !== updateData.img.id) {
+      await this.imagesService.deleteImage(target.img.id);
+    }
+
     await this.postsRepository.save(updated);
     return true;
   }
 
   async deletePost(id: number) {
+    const target = await this.getOnePost(id);
     const result = await this.postsRepository.delete({ id });
+
+    if (target.img) {
+      await this.imagesService.deleteImage(target.img.id);
+    }
     if (result.affected === 0)
       throw new NotFoundException(`Post id ${id} not found`);
     return true;
