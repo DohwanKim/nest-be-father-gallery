@@ -85,26 +85,26 @@ export class PostsService {
 
     await queryRunner.connect();
     await queryRunner.startTransaction();
-
     try {
       const results = [];
 
       for (const id of ids) {
         const target = await this.getOnePost(id);
-        if (target.img) {
-          deletedImageList.push(target.img.id);
-        }
 
-        const result = await queryRunner.manager
-          .getRepository(PostEntity)
-          .delete({ id });
+        if (target) {
+          const result = await queryRunner.manager
+            .getRepository(PostEntity)
+            .delete({ id: target.id });
 
-        if (result.affected === 0) {
-          return new NotFoundException(`Post id ${id} not found`);
+          if (result.affected === 0) {
+            return new NotFoundException(`Post ${id} has not found`);
+          }
+          results.push(true);
+          if (target && target.img && target.img.id) {
+            deletedImageList.push(target.img.id);
+          }
         }
-        results.push(true);
       }
-
       await queryRunner.commitTransaction();
 
       return results;

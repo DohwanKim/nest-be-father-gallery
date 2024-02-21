@@ -10,7 +10,7 @@ const mockService = {
   getOnePost: jest.fn(),
   createPost: jest.fn(),
   updatePost: jest.fn(),
-  deletePost: jest.fn(),
+  deletePosts: jest.fn(),
 };
 
 const mockConfigService = {
@@ -194,9 +194,14 @@ describe('PostsController', () => {
 
   describe('deletePost', () => {
     it('should delete a post', async () => {
-      const id = 1;
-      jest.spyOn(service, 'deletePost').mockImplementation(() => true);
+      const id = [1];
+      jest.spyOn(service, 'deletePosts').mockImplementation(() => true);
       expect(await controller.deletePost(id)).toBe(true);
+    });
+    it('should delete multiple posts', async () => {
+      const ids = [1, 2, 3];
+      jest.spyOn(service, 'deletePosts').mockImplementation(() => true);
+      expect(await controller.deletePost(ids)).toBe(true);
     });
   });
 });
