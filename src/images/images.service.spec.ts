@@ -98,4 +98,32 @@ describe('ImagesService', () => {
       );
     });
   });
+
+  describe('deleteImage', () => {
+    it('should delete image from Cloudflare Image service', async () => {
+      const imageId = 'image_id';
+
+      mockAxios
+        .onDelete(
+          `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_IMAGE_ACCOUNT_ID}/images/v1/${imageId}`,
+        )
+        .reply(200);
+
+      await expect(service.deleteImage(imageId)).resolves.toBeUndefined();
+    });
+
+    it('should handle failure to delete image from Cloudflare Image service', async () => {
+      const imageId = 'image_id';
+
+      mockAxios
+        .onDelete(
+          `https://api.cloudflare.com/client/v4/accounts/${CLOUDFLARE_IMAGE_ACCOUNT_ID}/images/v1/${imageId}`,
+        )
+        .reply(500);
+
+      await expect(service.deleteImage(imageId)).rejects.toThrow(
+        'Failed to delete image',
+      );
+    });
+  });
 });

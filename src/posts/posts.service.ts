@@ -1,6 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PostEntity } from './entity/post.entity';
-import { Repository } from 'typeorm';
+import { DataSource, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { CreatePostDto } from './dto/create-post.dto';
 import { UpdatePostDto } from './dto/update-post.dto';
@@ -24,6 +24,7 @@ export class PostsService {
   constructor(
     @InjectRepository(PostEntity)
     private postsRepository: Repository<PostEntity>,
+    private dataSource: DataSource,
     private imagesService: ImagesService,
   ) {}
 
@@ -78,15 +79,46 @@ export class PostsService {
     return true;
   }
 
-  async deletePost(id: number) {
-    const target = await this.getOnePost(id);
-    const result = await this.postsRepository.delete({ id });
+  async deletePosts(ids: number[]) {
+    const queryRunner = this.dataSource.createQueryRunner();
+    const deletedImageList: string[] = [];
 
-    if (target.img) {
-      await this.imagesService.deleteImage(target.img.id);
+    await queryRunner.connect();
+    await queryRunner.startTransaction();
+    try {
+      const results = [];
+
+      for (const id of ids) {
+        const target = await this.getOnePost(id);
+
+        if (target) {
+          const result = await queryRunner.manager
+            .getRepository(PostEntity)
+            .delete({ id: target.id });
+
+          if (result.affected === 0) {
+            return new NotFoundException(`Post ${id} has not found`);
+          }
+          results.push(true);
+          if (target && target.img && target.img.id) {
+            deletedImageList.push(target.img.id);
+          }
+        }
+      }
+      await queryRunner.commitTransaction();
+
+      return results;
+    } catch (error) {
+      await queryRunner.rollbackTransaction();
+      throw error;
+    } finally {
+      if (deletedImageList.length > 0) {
+        await Promise.all(
+          deletedImageList.map((id) => this.imagesService.deleteImage(id)),
+        );
+      }
+
+      await queryRunner.release();
     }
-    if (result.affected === 0)
-      throw new NotFoundException(`Post id ${id} not found`);
-    return true;
   }
 }
