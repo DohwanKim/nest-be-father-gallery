@@ -9,7 +9,7 @@ import { CreatePostDto } from '../src/posts/dto/create-post.dto';
 import * as cookieParser from 'cookie-parser';
 import { ArtType } from '../src/constants/post.enum';
 
-type postType = {
+type PostType = {
   id: number;
   createAt: Date;
   updateAt: Date;
@@ -160,7 +160,7 @@ describe('Posts (e2e)', () => {
 
           expect(items).toBeInstanceOf(Array);
           expect(items.length).toBe(1);
-          items.forEach((item: postType) => {
+          items.forEach((item: PostType) => {
             expect(item.title).toContain('filter');
           });
         });
@@ -175,7 +175,7 @@ describe('Posts (e2e)', () => {
 
           expect(items).toBeInstanceOf(Array);
           expect(items.length).toBe(1);
-          items.forEach((item: postType) => {
+          items.forEach((item: PostType) => {
             expect(item.artType).toBe('WATERCOLOR');
           });
         });
@@ -190,7 +190,7 @@ describe('Posts (e2e)', () => {
 
           expect(items).toBeInstanceOf(Array);
           expect(items.length).toBe(3);
-          items.forEach((item: postType) => {
+          items.forEach((item: PostType) => {
             expect(item.tags).toContain('other1');
           });
         });
@@ -249,6 +249,24 @@ describe('Posts (e2e)', () => {
       return request(app.getHttpServer())
         .delete(`/posts/${newPostId}`)
         .expect(200);
+    });
+
+    it('should return 200(multiple posts)', async () => {
+      const allIds = await request(app.getHttpServer())
+        .get('/posts')
+        .then((res) => res.body.items.map((item: PostType) => item.id));
+
+      return request(app.getHttpServer())
+        .delete(`/posts/${allIds}`)
+        .expect(200)
+        .then(() => {
+          request(app.getHttpServer())
+            .get('/posts')
+            .expect(200)
+            .expect((res) => {
+              expect(res.body.items.length).toBe(0);
+            });
+        });
     });
 
     it('should return 404', () => {
