@@ -92,14 +92,17 @@ export class PostsController {
     return this.postsService.updatePost(postId, updateData);
   }
 
-  @Delete(':id')
+  @Delete(':ids')
   @ApiBearerAuth()
   @ApiResponse({
     description: '게시글 삭제',
     type: Boolean,
   })
   @UseGuards(JwtAccessGuard)
-  deletePost(@Param('id') postId: number) {
-    return this.postsService.deletePost(postId);
+  deletePost(
+    @Param('ids', new ParseArrayPipe({ items: Number, separator: ',' }))
+    postIds: number[],
+  ) {
+    return this.postsService.deletePosts(postIds);
   }
 }
