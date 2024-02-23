@@ -13,8 +13,12 @@ import * as Joi from 'joi';
     ConfigModule.forRoot({
       cache: true,
       isGlobal: true,
-      envFilePath: process.env.NODE_ENV === 'dev' ? '.env.dev' : '.env.test',
-      ignoreEnvFile: process.env.NODE_ENV === 'prod',
+      envFilePath:
+        process.env.NODE_ENV === 'dev'
+          ? '.env.dev'
+          : process.env.NODE_ENV === 'prod'
+            ? '.env.prod'
+            : '.env.test',
       validationSchema: Joi.object({
         NODE_ENV: Joi.string().required(),
         DOMAIN_URL: Joi.string().required(),
