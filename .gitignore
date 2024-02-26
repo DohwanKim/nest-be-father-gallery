@@ -39,3 +39,8 @@ lerna-debug.log*
 .env.dev
 .env.prod
 .env.test
+
+# PM2
+ecosystem.config.js
+current
+source/
