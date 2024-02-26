@@ -14,8 +14,17 @@ export const typeOrmConfig: TypeOrmModuleAsyncOptions = {
     synchronize:
       configService.get('ENV_TYPE') === 'dev' ||
       configService.get('ENV_TYPE') === 'test',
-    entities: [__dirname + '/../**/*.entity{.ts,.js}'],
+    entities: [__dirname + '/**/*.entity{.ts,.js}'],
     dropSchema: configService.get('ENV_TYPE') === 'test',
     logging: configService.get('ENV_TYPE') === 'dev',
+    logger: 'file',
+    migrationsTableName: 'migrations',
+    migrations: [__dirname + '/migrations/**/*{.ts,.js}'],
+    migrationsRun: false,
+    cli: {
+      migrationsDir: 'src/migrations',
+    },
   }),
 };
+
+export default typeOrmConfig;

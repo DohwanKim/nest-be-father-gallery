@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ImagesModule } from './images/images.module';
 import { AuthModule } from './auth/auth.module';
-import { typeOrmConfig } from './configs/typeorm.config';
+import typeOrmConfig from './ormconfig';
 import { UsersModule } from './users/users.module';
 import * as Joi from 'joi';
 
