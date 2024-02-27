@@ -18,6 +18,7 @@ async function bootstrap() {
       'https://next-fe-father-gallery.vercel.app',
       'http://localhost:3001',
     ],
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     exposedHeaders: ['Authorization', 'accessToken', 'refreshToken'],
   });
