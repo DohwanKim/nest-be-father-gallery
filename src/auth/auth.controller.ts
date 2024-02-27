@@ -8,7 +8,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { SignUpDto } from './dto/sign-up.dto';
+// import { SignUpDto } from './dto/sign-up.dto';
 import { SignInDto } from './dto/sign-in.dto';
 import { Response } from 'express';
 import { JwtRefreshGuard } from './guards/jwt-refresh.guard';
@@ -29,16 +29,16 @@ export class AuthController {
     private readonly usersService: UsersService,
   ) {}
 
-  @ApiOperation({ summary: '회원가입' })
-  @ApiResponse({
-    status: 201,
-    type: Boolean,
-    description: '회원가입 성공 및 회원 생성',
-  })
-  @Post('/signup')
-  async signUp(@Body() signUpDto: SignUpDto) {
-    return await this.authService.signUp(signUpDto);
-  }
+  // @ApiOperation({ summary: '회원가입' })
+  // @ApiResponse({
+  //   status: 201,
+  //   type: Boolean,
+  //   description: '회원가입 성공 및 회원 생성',
+  // })
+  // @Post('/signup')
+  // async signUp(@Body() signUpDto: SignUpDto) {
+  //   return await this.authService.signUp(signUpDto);
+  // }
 
   @ApiOperation({ summary: '로그인' })
   @ApiResponse({

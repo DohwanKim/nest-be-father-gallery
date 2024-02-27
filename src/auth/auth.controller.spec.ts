@@ -45,17 +45,17 @@ describe('AuthController', () => {
     expect(controller).toBeDefined();
   });
 
-  describe('signUp', () => {
-    it('should return true', async () => {
-      const signUpDto = {
-        username: 'test@gmail.com',
-        password: 'Testtest!1',
-      };
-
-      await controller.signUp(signUpDto);
-      expect(authService.signUp).toHaveBeenCalledWith(signUpDto);
-    });
-  });
+  // describe('signUp', () => {
+  //   it('should return true', async () => {
+  //     const signUpDto = {
+  //       username: 'test@gmail.com',
+  //       password: 'Testtest!1',
+  //     };
+  //
+  //     await controller.signUp(signUpDto);
+  //     expect(authService.signUp).toHaveBeenCalledWith(signUpDto);
+  //   });
+  // });
 
   describe('signIn', () => {
     it('should sign in user and set headers/cookies', async () => {
