@@ -4,7 +4,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ImagesModule } from './images/images.module';
 import { AuthModule } from './auth/auth.module';
-import typeOrmConfig from './ormconfig';
+import typeormConfig from './configs/typeorm.config';
 import { UsersModule } from './users/users.module';
 import * as Joi from 'joi';
 
@@ -40,7 +40,7 @@ import * as Joi from 'joi';
         JWT_REFRESH_TOKEN_MAX_AGE: Joi.string().required(),
       }),
     }),
-    TypeOrmModule.forRootAsync(typeOrmConfig),
+    TypeOrmModule.forRootAsync(typeormConfig),
     PostsModule,
     ImagesModule,
     AuthModule,
