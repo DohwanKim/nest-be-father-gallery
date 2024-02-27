@@ -15,7 +15,7 @@ async function bootstrap() {
 
   app.enableCors({
     origin: [
-      'https://next-fe-father-gallery-v578.vercel.app/',
+      'https://next-fe-father-gallery.vercel.app/',
       'http://localhost:3001',
     ],
     credentials: true,
