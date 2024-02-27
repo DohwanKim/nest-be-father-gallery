@@ -12,9 +12,9 @@ export const typeormConfig: TypeOrmModuleAsyncOptions = {
     username: configService.get('DATABASE_USERNAME'),
     password: configService.get('DATABASE_PASSWORD'),
     database: configService.get('DATABASE_NAME'),
-    synchronize: true,
-    // configService.get('ENV_TYPE') === 'dev' ||
-    // configService.get('ENV_TYPE') === 'test',
+    synchronize:
+      configService.get('ENV_TYPE') === 'dev' ||
+      configService.get('ENV_TYPE') === 'test',
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     dropSchema: configService.get('ENV_TYPE') === 'test',
     logging: configService.get('ENV_TYPE') === 'dev',
