@@ -27,7 +27,7 @@ export class AuthService {
       domain: this.configService.get('DOMAIN'),
       path: '/',
       secure: true,
-      sameSite: 'none',
+      sameSite: 'lax',
       httpOnly: true,
     };
   }
