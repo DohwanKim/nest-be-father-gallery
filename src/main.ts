@@ -14,10 +14,7 @@ async function bootstrap() {
     .build();
 
   app.enableCors({
-    origin: [
-      'https://next-fe-father-gallery.vercel.app',
-      'http://localhost:3001',
-    ],
+    origin: ['https://kimdongcheol-art.com', 'http://localhost:3001'],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS',
     credentials: true,
     exposedHeaders: ['Authorization', 'accessToken', 'refreshToken'],
