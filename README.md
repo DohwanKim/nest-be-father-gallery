@@ -38,7 +38,7 @@ Nest.js로 개발한 Backend 프로젝트 입니다.<br>
 ## 차후 진행할 작업
 - [x] 페이지네이션 구현
 - [x] Swagger를 이용한 API 문서화
-- [ ] AWS Lightsail을 이용한 배포
+- [x] AWS Lightsail을 이용한 배포
 - [ ] CI/CD 구축
 - [ ] (option) 차후 프론트엔드 작성 후 Mono Repo로 변경
 

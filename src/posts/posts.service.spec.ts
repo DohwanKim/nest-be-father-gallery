@@ -158,6 +158,7 @@ describe('PostsService', () => {
     it('should create a post', async () => {
       const postData = {
         title: 'init title',
+        drawingDate: new Date(),
         artType: 'NONE' as ArtType,
         canvasSize: '100x100',
         price: 100,

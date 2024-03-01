@@ -28,6 +28,9 @@ export class PostEntity {
   @Column({ type: 'varchar', length: 100, comment: '게시글 제목' })
   title: string;
 
+  @Column({ type: 'date', comment: '그림을 그린 날짜', nullable: true })
+  drawingDate: Date;
+
   @Column({
     type: 'enum',
     enum: ArtType,

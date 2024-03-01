@@ -45,7 +45,7 @@ export class PostsService {
       queryBuilder.andWhere('post.tags && :tags', { tags: filterOptions.tags });
     }
     if (filterOptions.sort) {
-      queryBuilder.orderBy('post.createAt', filterOptions.sort);
+      queryBuilder.orderBy('post.drawingDate', filterOptions.sort);
     }
     if (filterOptions.artTypes && filterOptions.artTypes.length > 0) {
       queryBuilder.andWhere('post.artType IN (:...artTypes)', {

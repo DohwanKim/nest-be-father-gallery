@@ -1,5 +1,6 @@
 import {
   IsBoolean,
+  IsDate,
   IsEnum,
   IsNumber,
   IsOptional,
@@ -22,6 +23,15 @@ export class CreatePostDto {
   @MinLength(1)
   @MaxLength(100)
   title: string;
+
+  @ApiProperty({
+    example: '2021-01-01',
+    description: '그림 그린 날짜',
+    required: false,
+  })
+  @Type(() => Date)
+  @IsDate()
+  drawingDate: Date;
 
   @ApiProperty({
     example: 'NONE',

@@ -161,6 +161,7 @@ describe('PostsController', () => {
       const postData = {
         title: 'init title',
         artType: 'NONE' as ArtType,
+        drawingDate: new Date(),
         canvasSize: '100x100',
         price: 100,
         frameType: '도화지',
