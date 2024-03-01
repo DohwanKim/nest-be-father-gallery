@@ -13,8 +13,9 @@ export const typeormConfig: TypeOrmModuleAsyncOptions = {
     password: configService.get('DATABASE_PASSWORD'),
     database: configService.get('DATABASE_NAME'),
     synchronize:
-      configService.get('ENV_TYPE') === 'dev' ||
-      configService.get('ENV_TYPE') === 'test',
+      // configService.get('ENV_TYPE') === 'dev' ||
+      // configService.get('ENV_TYPE') === 'test',
+      true,
     entities: [__dirname + '/../**/*.entity{.ts,.js}'],
     dropSchema: configService.get('ENV_TYPE') === 'test',
     logging: configService.get('ENV_TYPE') === 'dev',
