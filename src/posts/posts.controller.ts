@@ -68,6 +68,11 @@ export class PostsController {
     );
   }
 
+  @Get('random-post')
+  getRandomPost() {
+    return this.postsService.getRandomPost();
+  }
+
   @Get(':id')
   @ApiGetOnePostDecorator()
   getOnePost(@Param('id') postId: number): Promise<PostEntity> {

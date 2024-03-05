@@ -62,6 +62,15 @@ export class PostsService {
     return post;
   }
 
+  async getRandomPost() {
+    return await this.postsRepository
+      .createQueryBuilder('post')
+      .leftJoinAndSelect('post.img', 'img')
+      .orderBy('RANDOM()')
+      .limit(4)
+      .getMany();
+  }
+
   async createPost(postData: CreatePostDto) {
     const newPost = this.postsRepository.create(postData);
     return await this.postsRepository.save(newPost);

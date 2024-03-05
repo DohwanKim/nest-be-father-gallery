@@ -154,6 +154,36 @@ describe('PostsService', () => {
     });
   });
 
+  describe('getRandomPost', () => {
+    it('should return random posts', async () => {
+      const result = [
+        {
+          id: 1,
+          createAt: '2024-01-18T08:56:02.721Z',
+          updateAt: '2024-01-18T08:56:02.721Z',
+          version: 2,
+          title: 'init title',
+          artType: 'NONE' as ArtType,
+          canvasSize: '100x100',
+          price: 100,
+          frameType: '도화지',
+          contents: '게시글',
+          tags: [],
+          img: null,
+        },
+      ];
+
+      postsRepository.createQueryBuilder.mockReturnValue({
+        leftJoinAndSelect: jest.fn().mockReturnThis(),
+        orderBy: jest.fn().mockReturnThis(),
+        limit: jest.fn().mockReturnThis(),
+        getMany: jest.fn().mockResolvedValue(result),
+      });
+
+      expect(await postsService.getRandomPost()).toEqual(result);
+    });
+  });
+
   describe('createPost', () => {
     it('should create a post', async () => {
       const postData = {

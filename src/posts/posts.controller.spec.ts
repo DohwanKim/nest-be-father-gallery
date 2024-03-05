@@ -8,6 +8,7 @@ import { ArtType } from '../constants/post.enum';
 const mockService = {
   getPostListPaginateWithFilter: jest.fn(),
   getOnePost: jest.fn(),
+  getRandomPost: jest.fn(),
   createPost: jest.fn(),
   updatePost: jest.fn(),
   deletePosts: jest.fn(),
@@ -172,6 +173,31 @@ describe('PostsController', () => {
       };
       jest.spyOn(service, 'createPost').mockImplementation(() => true);
       expect(await controller.createPost(postData)).toBe(true);
+    });
+  });
+
+  describe('getRandomPost', () => {
+    it('should return random posts', async () => {
+      const expectResult = [
+        {
+          id: 1,
+          createAt: '2024-01-18T08:56:02.721Z',
+          updateAt: '2024-01-18T08:56:02.721Z',
+          version: 2,
+          title: 'init title',
+          artType: 'NONE',
+          canvasSize: '100x100',
+          price: 100,
+          frameType: '도화지',
+          contents: '게시글',
+          tags: [],
+          img: null,
+        },
+      ];
+      jest
+        .spyOn(service, 'getRandomPost')
+        .mockImplementation(() => expectResult);
+      expect(await controller.getRandomPost()).toEqual(expectResult);
     });
   });
 
