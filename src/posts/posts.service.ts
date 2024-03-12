@@ -67,7 +67,7 @@ export class PostsService {
       .createQueryBuilder('post')
       .leftJoinAndSelect('post.img', 'img')
       .orderBy('RANDOM()')
-      .limit(4)
+      .limit(6)
       .getMany();
   }
 
