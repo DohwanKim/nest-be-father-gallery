@@ -13,6 +13,7 @@ type PostType = {
   id: number;
   createAt: Date;
   updateAt: Date;
+  drawingDate: Date;
   version: number;
   title: string;
   artType: ArtType;
@@ -31,6 +32,7 @@ const testUser = {
 
 const testPost: CreatePostDto = {
   title: 'test post',
+  drawingDate: new Date('2024-01-18T08:56:02.721Z'),
   artType: 'NONE' as ArtType,
   canvasSize: '100x100',
   price: 10000,
@@ -145,7 +147,7 @@ describe('Posts (e2e)', () => {
 
           expect(items).toBeInstanceOf(Array);
           expect(items[items.length - 1]).toEqual(
-            expect.objectContaining(testPost),
+            expect.objectContaining({ ...testPost, drawingDate: '2024-01-18' }),
           );
           newPostId = items[items.length - 1].id;
         });
@@ -203,12 +205,25 @@ describe('Posts (e2e)', () => {
         .get(`/posts/${newPostId}`)
         .expect(200)
         .expect((res) => {
-          expect(res.body).toEqual(expect.objectContaining(testPost));
+          expect(res.body).toEqual(
+            expect.objectContaining({ ...testPost, drawingDate: '2024-01-18' }),
+          );
         });
     });
 
     it('should return 404', () => {
       return request(app.getHttpServer()).get(`/posts/999`).expect(404);
+    });
+  });
+
+  describe('GET /posts/random-post', () => {
+    it('should return 200', () => {
+      return request(app.getHttpServer())
+        .get('/posts/random-post')
+        .expect(200)
+        .expect((res) => {
+          expect(res.body).toBeInstanceOf(Array);
+        });
     });
   });
 
