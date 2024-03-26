@@ -14,7 +14,7 @@ export class ImagesController {
   constructor(private readonly imagesService: ImagesService) {}
 
   @Get('/get-upload-url')
-  @ApiOperation({ summary: '로그인' })
+  @ApiOperation({ summary: '클라우드 업로드 url 가져오기' })
   @ApiResponse({
     status: 200,
     schema: {
