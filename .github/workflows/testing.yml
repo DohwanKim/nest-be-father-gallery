@@ -1,0 +1,26 @@
+name: Tests
+on:
+  push:
+    branches: [main, prod]
+  pull_request:
+    branches: [main, prod]
+jobs:
+  jest-UT-IT:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: lts/*
+      - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: npm ci
+      - name: Unit, Integration testing
+        run: npm test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: jest-report
+          path: jest-report/
+          retention-days: 30
