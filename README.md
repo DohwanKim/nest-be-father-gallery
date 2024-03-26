@@ -40,6 +40,8 @@ Nest.js로 개발한 Backend 프로젝트 입니다.<br>
 - [x] Swagger를 이용한 API 문서화
 - [x] AWS Lightsail을 이용한 배포
 - [ ] CI/CD 구축
+  - [x] CI: Github Actions
+  - [ ] CD: AWS Lightsail
 - [ ] (option) 차후 프론트엔드 작성 후 Mono Repo로 변경
 
 ## Installation
