@@ -20,6 +20,7 @@ import {
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
+import { SignUpDto } from './dto/sign-up.dto';
 
 @ApiTags('Auth')
 @Controller('auth')
@@ -29,16 +30,16 @@ export class AuthController {
     private readonly usersService: UsersService,
   ) {}
 
-  // @ApiOperation({ summary: '회원가입' })
-  // @ApiResponse({
-  //   status: 201,
-  //   type: Boolean,
-  //   description: '회원가입 성공 및 회원 생성',
-  // })
-  // @Post('/signup')
-  // async signUp(@Body() signUpDto: SignUpDto) {
-  //   return await this.authService.signUp(signUpDto);
-  // }
+  @ApiOperation({ summary: '일반회원 회원가입' })
+  @ApiResponse({
+    status: 201,
+    type: Boolean,
+    description: '회원가입 성공 및 회원 생성',
+  })
+  @Post('/signup')
+  async signUp(@Body() signUpDto: SignUpDto) {
+    return await this.authService.signUp(signUpDto);
+  }
 
   @ApiOperation({ summary: '로그인' })
   @ApiResponse({

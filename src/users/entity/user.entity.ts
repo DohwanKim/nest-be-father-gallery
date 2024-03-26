@@ -31,7 +31,7 @@ export class UserEntity {
   @Column({
     type: 'enum',
     enum: ['ADMIN', 'MANAGER', 'USER'],
-    default: 'ADMIN',
+    default: 'USER',
   })
   role: UserRoleType;
 
